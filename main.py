@@ -1,15 +1,17 @@
 import pieces
 from board import Board
-from agent import Ai, User, Agent
+from agent import Ai, User
+import sys
 
-# TODO: create a session --> game: board, white, black
-# TODO: add AI vs AI
+# TODO: add AI vs AI --> need to clean up AI implementation
+# TODO: was able to castle through a knight king/rook fork as black --> illegal
+# TODO: was able to move king right two spaces w/o initiating castle
 
 def choose_mode() -> str:
     mode = -1
     while not mode in ['0', '1']:
         mode = input("Choose a game mode, 0 user vs ai, 1 for ai vs ai: ")
-    return 'UvA' if mode == 1 else 'AvA'
+    return 'UvA' if mode == '0' else 'AvA'
         
 
 def choose_colors():
