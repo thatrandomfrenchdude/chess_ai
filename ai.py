@@ -111,17 +111,17 @@ class AI:
     INFINITE = 10000000
 
     @staticmethod
-    def get_ai_move(chessboard, invalid_moves):
+    def get_ai_move(chessboard, color, invalid_moves):
         best_move = 0
         best_score = AI.INFINITE
-        for move in chessboard.get_possible_moves(pieces.Piece.BLACK):
+        for move in chessboard.get_possible_moves(color):
             if (AI.is_invalid_move(move, invalid_moves)):
                 continue
 
             copy = board.Board.clone(chessboard)
             copy.perform_move(move)
 
-            score = AI.alphabeta(copy, 2, -AI.INFINITE, AI.INFINITE, True)
+            score = AI.alphabeta(copy, 2, -AI.INFINITE, AI.INFINITE, True, color)
             if (score < best_score):
                 best_score = score
                 best_move = move
@@ -132,7 +132,7 @@ class AI:
 
         copy = board.Board.clone(chessboard)
         copy.perform_move(best_move)
-        if (copy.is_check(pieces.Piece.BLACK)):
+        if (copy.is_check(color)):
             invalid_moves.append(best_move)
             return AI.get_ai_move(chessboard, invalid_moves)
 
@@ -146,56 +146,102 @@ class AI:
         return False
 
     @staticmethod
-    def minimax(board, depth, maximizing):
+    def minimax(board, depth, maximizing, color):
         if (depth == 0):
             return Heuristics.evaluate(board)
 
-        if (maximizing):
-            best_score = -AI.INFINITE
-            for move in board.get_possible_moves(pieces.Piece.WHITE):
-                copy = board.Board.clone(board)
-                copy.perform_move(move)
+        if color == pieces.Piece.BLACK:
+            if (maximizing):
+                best_score = -AI.INFINITE
+                for move in board.get_possible_moves(pieces.Piece.WHITE):
+                    copy = board.Board.clone(board)
+                    copy.perform_move(move)
 
-                score = AI.minimax(copy, depth-1, False)
-                best_score = max(best_score, score)
+                    score = AI.minimax(copy, depth-1, False)
+                    best_score = max(best_score, score)
 
-            return best_score
+                return best_score
+            else:
+                best_score = AI.INFINITE
+                for move in board.get_possible_moves(pieces.Piece.BLACK):
+                    copy = board.Board.clone(board)
+                    copy.perform_move(move)
+
+                    score = AI.minimax(copy, depth-1, True)
+                    best_score = min(best_score, score)
+
+                return best_score
         else:
-            best_score = AI.INFINITE
-            for move in board.get_possible_moves(pieces.Piece.BLACK):
-                copy = board.Board.clone(board)
-                copy.perform_move(move)
+            if (maximizing):
+                best_score = -AI.INFINITE
+                for move in board.get_possible_moves(pieces.Piece.BLACK):
+                    copy = board.Board.clone(board)
+                    copy.perform_move(move)
 
-                score = AI.minimax(copy, depth-1, True)
-                best_score = min(best_score, score)
+                    score = AI.minimax(copy, depth-1, False)
+                    best_score = max(best_score, score)
 
-            return best_score
+                return best_score
+            else:
+                best_score = AI.INFINITE
+                for move in board.get_possible_moves(pieces.Piece.WHITE):
+                    copy = board.Board.clone(board)
+                    copy.perform_move(move)
+
+                    score = AI.minimax(copy, depth-1, True)
+                    best_score = min(best_score, score)
+
+                return best_score
 
     @staticmethod
-    def alphabeta(chessboard, depth, a, b, maximizing):
+    def alphabeta(chessboard, depth, a, b, maximizing, color):
         if (depth == 0):
             return Heuristics.evaluate(chessboard)
 
-        if (maximizing):
-            best_score = -AI.INFINITE
-            for move in chessboard.get_possible_moves(pieces.Piece.WHITE):
-                copy = board.Board.clone(chessboard)
-                copy.perform_move(move)
+        if color == pieces.Piece.BLACK:
+            if (maximizing):
+                best_score = -AI.INFINITE
+                for move in chessboard.get_possible_moves(pieces.Piece.WHITE):
+                    copy = board.Board.clone(chessboard)
+                    copy.perform_move(move)
 
-                best_score = max(best_score, AI.alphabeta(copy, depth-1, a, b, False))
-                a = max(a, best_score)
-                if (b <= a):
-                    break
-            return best_score
+                    best_score = max(best_score, AI.alphabeta(copy, depth-1, a, b, False, pieces.Piece.WHITE))
+                    a = max(a, best_score)
+                    if (b <= a):
+                        break
+                return best_score
+            else:
+                best_score = AI.INFINITE
+                for move in chessboard.get_possible_moves(pieces.Piece.BLACK):
+                    copy = board.Board.clone(chessboard)
+                    copy.perform_move(move)
+
+                    best_score = min(best_score, AI.alphabeta(copy, depth-1, a, b, True, pieces.Piece.BLACK))
+                    b = min(b, best_score)
+                    if (b <= a):
+                        break
+                return best_score
         else:
-            best_score = AI.INFINITE
-            for move in chessboard.get_possible_moves(pieces.Piece.BLACK):
-                copy = board.Board.clone(chessboard)
-                copy.perform_move(move)
+            if (maximizing):
+                best_score = -AI.INFINITE
+                for move in chessboard.get_possible_moves(pieces.Piece.BLACK):
+                    copy = board.Board.clone(chessboard)
+                    copy.perform_move(move)
 
-                best_score = min(best_score, AI.alphabeta(copy, depth-1, a, b, True))
-                b = min(b, best_score)
-                if (b <= a):
-                    break
-            return best_score
+                    best_score = max(best_score, AI.alphabeta(copy, depth-1, a, b, False, pieces.Piece.BLACK))
+                    a = max(a, best_score)
+                    if (b <= a):
+                        break
+                return best_score
+            else:
+                best_score = AI.INFINITE
+                for move in chessboard.get_possible_moves(pieces.Piece.WHITE):
+                    copy = board.Board.clone(chessboard)
+                    copy.perform_move(move)
+
+                    best_score = min(best_score, AI.alphabeta(copy, depth-1, a, b, True, pieces.Piece.WHITE))
+                    b = min(b, best_score)
+                    if (b <= a):
+                        break
+                return best_score
 
