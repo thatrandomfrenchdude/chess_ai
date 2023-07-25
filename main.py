@@ -12,7 +12,7 @@ def choose_mode() -> str:
     return 'UvA' if mode == 1 else 'AvA'
         
 
-def choose_colors() -> tuple(Agent, Agent, bool):
+def choose_colors():
     user_color = -1
     while not user_color in ['0', '1']:
         user_color = input("Choose a color, 0 for white, 1 for black: ")
@@ -76,7 +76,7 @@ class Chess():
                     break
 
             self.board.perform_move(black_move)
-            print("AI move: " + black_move.to_string())
+            print("Black move: " + black_move.to_string())
             print(self.board.to_string())
 
 def main() -> None:

@@ -134,7 +134,7 @@ class AI:
         copy.perform_move(best_move)
         if (copy.is_check(color)):
             invalid_moves.append(best_move)
-            return AI.get_ai_move(chessboard, invalid_moves)
+            return AI.get_ai_move(chessboard, color, invalid_moves)
 
         return best_move
 
