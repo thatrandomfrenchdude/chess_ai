@@ -4,15 +4,7 @@ Basic Chess AI written in Python 3.
 
 Uses the Alpha-Beta algorithm to search for the best move. 
 
-<img src="./preview.png" width="200" alt="Python Chess AI Program">
-
-## Getting started
-Download the repository and install the numpy dependency:
-```
-git clone git@github.com:Dirk94/ChessAI.git
-cd ChessAI
-pip3 install numpy
-```
+<img src="data/preview.png" width="200" alt="Python Chess AI Program">
 
 Run the program and start playing chess! ♟️
 ```
