@@ -1,8 +1,6 @@
 import pieces
-# from move import Move
 
 class Board:
-
     WIDTH = 8
     HEIGHT = 8
 
@@ -21,6 +19,7 @@ class Board:
                     chesspieces[x][y] = piece.clone()
         return cls(chesspieces, chessboard.white_king_moved, chessboard.black_king_moved)
 
+    # creates a new chess board
     @classmethod
     def new(cls):
         chess_pieces = [[0 for x in range(Board.WIDTH)] for y in range(Board.HEIGHT)]
@@ -55,6 +54,7 @@ class Board:
 
         return cls(chess_pieces, False, False)
 
+    # list all possible moves for a given piece at a given position
     def get_possible_moves(self, color):
         moves = []
         for x in range(Board.WIDTH):
@@ -66,16 +66,20 @@ class Board:
 
         return moves
 
+
     def perform_move(self, move):
         piece = self.chesspieces[move.xfrom][move.yfrom]
         self.move_piece(piece, move.xto, move.yto)
+        print(piece)
 
         # If a pawn reaches the end, upgrade it to a queen.
         if (piece.piece_type == pieces.Pawn.PIECE_TYPE):
+            # print('pawn moved')
             if (piece.y == 0 or piece.y == Board.HEIGHT-1):
                 self.chesspieces[piece.x][piece.y] = pieces.Queen(piece.x, piece.y, piece.color)
 
         if (piece.piece_type == pieces.King.PIECE_TYPE):
+            # print('king moved')
             # Mark the king as having moved.
             if (piece.color == pieces.Piece.WHITE):
                 self.white_king_moved = True
@@ -84,13 +88,16 @@ class Board:
             
             # Check if king-side castling
             if (move.xto - move.xfrom == 2):
+                print('king side castling')
                 rook = self.chesspieces[piece.x+1][piece.y]
                 self.move_piece(rook, piece.x+1, piece.y)
             # Check if queen-side castling
             if (move.xto - move.xfrom == -2):
+                print('queen side castling')
                 rook = self.chesspieces[piece.x-2][piece.y]
                 self.move_piece(rook, piece.x+1, piece.y)
     
+    # why is this needed?
     def move_piece(self, piece, xto, yto):
         self.chesspieces[piece.x][piece.y] = 0
         piece.x = xto
@@ -100,6 +107,8 @@ class Board:
 
 
     # Returns if the given color is checked.
+    # TODO: make this color agnostic
+    # only working for a single color, user is white agent is black
     def is_check(self, color):
         other_color = pieces.Piece.WHITE
         if (color == pieces.Piece.WHITE):
@@ -126,12 +135,13 @@ class Board:
     def get_piece(self, x, y):
         if (not self.in_bounds(x, y)):
             return 0
-
         return self.chesspieces[x][y]
 
+    # checks that the given coordinates are within the board spaces
     def in_bounds(self, x, y):
         return (x >= 0 and y >= 0 and x < Board.WIDTH and y < Board.HEIGHT)
 
+    # converts the board to a string
     def to_string(self):
         string =  "    A  B  C  D  E  F  G  H\n"
         string += "    -----------------------\n"

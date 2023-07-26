@@ -3,6 +3,9 @@ from board import Board
 from agent import Ai, User
 import sys
 
+# Reference
+# https://towardsdatascience.com/building-a-chess-ai-that-learns-from-experience-5cff953b6784
+
 # TODO: add AI vs AI --> need to clean up AI implementation
 # TODO: was able to castle through a knight king/rook fork as black --> illegal
 # TODO: was able to move king right two spaces w/o initiating castle
@@ -33,10 +36,6 @@ def choose_colors():
 
 class Chess():
     def __init__(self) -> None:
-        # creates a new board and prints it to console
-        self.board = Board.new()
-        print(self.board.to_string())
-
         # choose run mode
         mode = choose_mode()
 
@@ -52,6 +51,10 @@ class Chess():
             pass
 
     def loop(self) -> None:
+        # creates a new board and prints it to console
+        self.board = Board.new()
+        print(self.board.to_string())
+
         while True:
             # white move
             white_move = self.white.move(self.board)
