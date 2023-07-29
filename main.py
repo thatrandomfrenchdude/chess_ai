@@ -42,8 +42,8 @@ class Chess():
 
         if mode == 'UvA':
             # self.white, self.black, self.flip = choose_colors()
-            self.white = User(pieces.Piece.WHITE)
-            self.black = Ai(pieces.Piece.BLACK)
+            self.white = Ai(pieces.Piece.WHITE)
+            self.black = User(pieces.Piece.BLACK)
             self.flip = False
         elif mode == 'AvA':
             self.white = Ai(pieces.Piece.WHITE)
@@ -72,8 +72,8 @@ class Chess():
 
             # perform the move 
             self.board.perform_move(white_move)
-            print("White move: " + white_move.to_string())
-            # print(self.board.to_string())
+            # print("White move: " + white_move.to_string())
+            print(self.board.to_string())
 
             # black move
             black_move = self.black.move(self.board)
@@ -87,8 +87,8 @@ class Chess():
 
             # perform the move
             self.board.perform_move(black_move)
-            # print("Black move: " + black_move.to_string())
-            print(self.board.to_string())
+            print("Black move: " + black_move.to_string())
+            # print(self.board.to_string())
 
 def main() -> None:
     game = Chess()
