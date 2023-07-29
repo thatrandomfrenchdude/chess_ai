@@ -5,10 +5,11 @@ class Board:
     WIDTH = 8
     HEIGHT = 8
 
-    def __init__(self, chesspieces, white_king_moved, black_king_moved, is_clone=False):
+    def __init__(self, chesspieces, white_king_moved, black_king_moved, flip, is_clone=False):
         self.chesspieces = chesspieces
         self.white_king_moved = white_king_moved
         self.black_king_moved = black_king_moved
+        self.flip = flip
         self.is_clone = is_clone
 
     @classmethod
@@ -19,11 +20,11 @@ class Board:
                 piece = chessboard.chesspieces[x][y]
                 if (piece != 0):
                     chesspieces[x][y] = piece.clone()
-        return cls(chesspieces, chessboard.white_king_moved, chessboard.black_king_moved, is_clone=True)
+        return cls(chesspieces, chessboard.white_king_moved, chessboard.black_king_moved, False, is_clone=True)
 
     # creates a new chess board
     @classmethod
-    def new(cls):
+    def new(cls, flip=False):
         chess_pieces = [[0 for x in range(Board.WIDTH)] for y in range(Board.HEIGHT)]
         
         # Create pawns.
@@ -69,7 +70,7 @@ class Board:
         # print(q.value)
         # print(q.get_possible_moves(cls(chess_pieces, False, False)))
 
-        return cls(chess_pieces, False, False)
+        return cls(chess_pieces, False, False, flip)
 
     # list all possible moves for a given piece at a given position
     def get_possible_moves(self, color):
@@ -90,20 +91,19 @@ class Board:
     def perform_move(self, move):
         # get the piece
         piece = self.chesspieces[move.xfrom][move.yfrom]
-        if not self.is_clone:
-            print(piece)
-            print(move.xfrom, move.yfrom)
-            print(move.xto, move.yto)
-            for col in self.chesspieces:
-                print(col)
-            print('move')
+        # if not self.is_clone:
+        #     print(piece)
+        #     print(move.xfrom, move.yfrom)
+        #     print(move.xto, move.yto)
+        #     for col in self.chesspieces:
+        #         print(col)
+        #     print('move')
         
         # increments piece on the board
         self.move_piece(piece, move.xto, move.yto)
-        if not self.is_clone:
-            for col in self.chesspieces:
-                print(col)
-        # sys.exit()
+        # if not self.is_clone:
+        #     for col in self.chesspieces:
+        #         print(col)
 
         # If a pawn reaches the end, upgrade it to a queen.
         if (piece.piece_type == pieces.Pawn.PIECE_TYPE):
@@ -120,8 +120,6 @@ class Board:
             else:
                 self.black_king_moved = True
             
-            # castling works correctly for white
-            # TODO: check castling for black
             # Check if king-side castling
             if not self.is_clone:
                 print(f"xto: {move.xto} xfrom: {move.xfrom}")
@@ -190,11 +188,35 @@ class Board:
 
     # converts the board to a string
     def to_string(self):
+        print(self.flip)
+        if self.flip:
+            return self.black_to_string()
+        else:
+            return self.white_to_string()
+        
+    # print with white pieces on the bottom
+    def white_to_string(self):
         string =  "    A  B  C  D  E  F  G  H\n"
         string += "    -----------------------\n"
         for y in range(Board.HEIGHT):
             string += str(8 - y) + " | "
             for x in range(Board.WIDTH):
+                piece = self.chesspieces[x][y]
+                if (piece != 0):
+                    string += piece.to_string()
+                else:
+                    string += ".. "
+            string += "\n"
+        return string + "\n"
+
+    
+    # print with black pieces on the bottom
+    def black_to_string(self):
+        string =  "    H  G  F  E  D  C  B  A\n"
+        string += "    -----------------------\n"
+        for y in reversed(range(Board.HEIGHT)):
+            string += str(y + 1) + " | "
+            for x in reversed(range(Board.WIDTH)):
                 piece = self.chesspieces[x][y]
                 if (piece != 0):
                     string += piece.to_string()

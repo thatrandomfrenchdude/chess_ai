@@ -1,7 +1,6 @@
 import pieces
 from board import Board
 from agent import Ai, User
-import sys
 
 # Reference
 # https://towardsdatascience.com/building-a-chess-ai-that-learns-from-experience-5cff953b6784
@@ -44,19 +43,15 @@ class Chess():
             # self.white, self.black, self.flip = choose_colors()
             self.white = Ai(pieces.Piece.WHITE)
             self.black = User(pieces.Piece.BLACK)
-            self.flip = False
+            self.flip = True
         elif mode == 'AvA':
             self.white = Ai(pieces.Piece.WHITE)
             self.black = Ai(pieces.Piece.BLACK)
             self.flip = False
 
-        # flip board when playing as black
-        if self.flip:
-            pass
-
     def loop(self) -> None:
         # creates a new board and prints it to console
-        self.board = Board.new()
+        self.board = Board.new(self.flip)
         print(self.board.to_string())
 
         while True:
@@ -72,7 +67,7 @@ class Chess():
 
             # perform the move 
             self.board.perform_move(white_move)
-            # print("White move: " + white_move.to_string())
+            print("White move: " + white_move.to_string())
             print(self.board.to_string())
 
             # black move
@@ -88,7 +83,7 @@ class Chess():
             # perform the move
             self.board.perform_move(black_move)
             print("Black move: " + black_move.to_string())
-            # print(self.board.to_string())
+            print(self.board.to_string())
 
 def main() -> None:
     game = Chess()
