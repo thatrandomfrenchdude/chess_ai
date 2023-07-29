@@ -69,8 +69,9 @@ class Board:
 
     def perform_move(self, move):
         piece = self.chesspieces[move.xfrom][move.yfrom]
+        # print(piece)
+        # print(piece)
         self.move_piece(piece, move.xto, move.yto)
-        print(piece)
 
         # If a pawn reaches the end, upgrade it to a queen.
         if (piece.piece_type == pieces.Pawn.PIECE_TYPE):
@@ -86,18 +87,20 @@ class Board:
             else:
                 self.black_king_moved = True
             
+            # castling doesnt work correctly
             # Check if king-side castling
             if (move.xto - move.xfrom == 2):
                 print('king side castling')
-                rook = self.chesspieces[piece.x+1][piece.y]
+                rook = self.chesspieces[piece.x+3][piece.y]
                 self.move_piece(rook, piece.x+1, piece.y)
             # Check if queen-side castling
             if (move.xto - move.xfrom == -2):
                 print('queen side castling')
                 rook = self.chesspieces[piece.x-2][piece.y]
                 self.move_piece(rook, piece.x+1, piece.y)
+
     
-    # why is this needed?
+    # why is this needed? --> updates state
     def move_piece(self, piece, xto, yto):
         self.chesspieces[piece.x][piece.y] = 0
         piece.x = xto

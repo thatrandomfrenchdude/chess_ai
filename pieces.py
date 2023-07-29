@@ -189,18 +189,33 @@ class King(Piece):
     def __init__(self, x, y, color):
         super(King, self).__init__(x, y, color, King.PIECE_TYPE, King.VALUE)
 
+    # def get_possible_moves(self, board):
+    #     moves = []
+
+    #     moves.append(self.get_move(board, self.x+1, self.y))
+    #     moves.append(self.get_move(board, self.x+1, self.y+1))
+    #     moves.append(self.get_move(board, self.x, self.y+1))
+    #     moves.append(self.get_move(board, self.x-1, self.y+1))
+    #     moves.append(self.get_move(board, self.x-1, self.y))
+    #     moves.append(self.get_move(board, self.x-1, self.y-1))
+    #     moves.append(self.get_move(board, self.x, self.y-1))
+    #     moves.append(self.get_move(board, self.x+1, self.y-1))
+
+    #     moves.append(self.get_castle_kingside_move(board))
+    #     moves.append(self.get_castle_queenside_move(board))
+
+    #     return self.remove_null_from_list(moves)
     def get_possible_moves(self, board):
         moves = []
 
-        moves.append(self.get_move(board, self.x+1, self.y))
-        moves.append(self.get_move(board, self.x+1, self.y+1))
-        moves.append(self.get_move(board, self.x, self.y+1))
-        moves.append(self.get_move(board, self.x-1, self.y+1))
-        moves.append(self.get_move(board, self.x-1, self.y))
-        moves.append(self.get_move(board, self.x-1, self.y-1))
-        moves.append(self.get_move(board, self.x, self.y-1))
-        moves.append(self.get_move(board, self.x+1, self.y-1))
+        # Add regular king moves
+        for dx in [-1, 0, 1]:
+            for dy in [-1, 0, 1]:
+                if dx == 0 and dy == 0:
+                    continue
+                moves.append(self.get_move(board, self.x + dx, self.y + dy))
 
+        # Add castling moves
         moves.append(self.get_castle_kingside_move(board))
         moves.append(self.get_castle_queenside_move(board))
 
