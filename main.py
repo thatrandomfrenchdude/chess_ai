@@ -6,10 +6,11 @@ from agent import Ai, User
 # TODO: implement en passant
 # TODO: convert board represenation to 1D array
 # TODO: implement piece lookup table by reference
-# TODO: implement lazy evaluation of possible moves + caching
+# TODO: implement lazy evaluation of possible moves + caching to db by state --> valid moves of piece p in position x,y and all other board positions
 # TODO: minimize memory usage by eliminating cloning --> bitboard?
 # TODO: optimize move generation
 # TODO: implement static evaluation function based on board state
+# TODO: add ui and api
 
 def choose_mode() -> str:
     mode = -1
