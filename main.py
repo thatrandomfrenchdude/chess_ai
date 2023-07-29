@@ -36,14 +36,14 @@ def choose_colors():
 class Chess():
     def __init__(self) -> None:
         # choose run mode
-        # mode = choose_mode()
-        mode = 'UvA'
+        mode = choose_mode()
+        # mode = 'UvA'
 
         if mode == 'UvA':
-            # self.white, self.black, self.flip = choose_colors()
-            self.white = Ai(pieces.Piece.WHITE)
-            self.black = User(pieces.Piece.BLACK)
-            self.flip = True
+            self.white, self.black, self.flip = choose_colors()
+            # self.white = Ai(pieces.Piece.WHITE)
+            # self.black = User(pieces.Piece.BLACK)
+            # self.flip = True
         elif mode == 'AvA':
             self.white = Ai(pieces.Piece.WHITE)
             self.black = Ai(pieces.Piece.BLACK)

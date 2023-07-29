@@ -41,10 +41,15 @@ class Ai(Agent):
             valid = False
             possible_moves = board.get_possible_moves(self.color)
             # No possible moves
-            if (not possible_moves):
+            if (move == 0 or not possible_moves):
+                if move == 0:
+                    print('move was 0')
+                else:
+                    print('no possible moves')
                 return 0
 
             for possible_move in possible_moves:
+                # got 0 here, which means line 42 did not work
                 if (move.equals(possible_move)):
                     valid = True
                     break

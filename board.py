@@ -1,4 +1,3 @@
-import sys
 import pieces
 
 class Board:
@@ -56,20 +55,6 @@ class Board:
         chess_pieces[4][0] = pieces.King(4, 0, pieces.Piece.BLACK)
         chess_pieces[3][0] = pieces.Queen(3, 0, pieces.Piece.BLACK)
 
-        # print the board mask
-        # for col in chess_pieces:
-        #     print(col)
-
-        # print the white queen object to see piece
-        # q = chess_pieces[3][Board.HEIGHT-1]
-        # print(q)
-        # print(q.piece_type)
-        # print(q.color)
-        # print(q.x)
-        # print(q.y)
-        # print(q.value)
-        # print(q.get_possible_moves(cls(chess_pieces, False, False)))
-
         return cls(chess_pieces, False, False, flip)
 
     # list all possible moves for a given piece at a given position
@@ -105,6 +90,7 @@ class Board:
         #     for col in self.chesspieces:
         #         print(col)
 
+        # TODO: implement en passant
         # If a pawn reaches the end, upgrade it to a queen.
         if (piece.piece_type == pieces.Pawn.PIECE_TYPE):
             # print('pawn moved')
@@ -112,8 +98,8 @@ class Board:
                 self.chesspieces[piece.x][piece.y] = pieces.Queen(piece.x, piece.y, piece.color)
 
         if (piece.piece_type == pieces.King.PIECE_TYPE):
-            if not self.is_clone:
-                print('king moved')
+            # if not self.is_clone:
+            #     print('king moved')
             # Mark the king as having moved.
             if (piece.color == pieces.Piece.WHITE):
                 self.white_king_moved = True
@@ -121,21 +107,21 @@ class Board:
                 self.black_king_moved = True
             
             # Check if king-side castling
-            if not self.is_clone:
-                print(f"xto: {move.xto} xfrom: {move.xfrom}")
-                print(f"to minus from: {move.xto - move.xfrom}")
+            # if not self.is_clone:
+            #     print(f"xto: {move.xto} xfrom: {move.xfrom}")
+            #     print(f"to minus from: {move.xto - move.xfrom}")
             if (move.xto - move.xfrom == 2):
-                if not self.is_clone:
-                    print('king side castling')
+                # if not self.is_clone:
+                #     print('king side castling')
                 rook = self.chesspieces[piece.x+1][piece.y]
-                if not self.is_clone:
-                    print(piece, piece.x, piece.y)
-                    print(rook)
+                # if not self.is_clone:
+                #     print(piece, piece.x, piece.y)
+                #     print(rook)
                 self.move_piece(rook, piece.x-1, piece.y)
             # Check if queen-side castling
             if (move.xto - move.xfrom == -2):
-                if not self.is_clone:
-                    print('queen side castling')
+                # if not self.is_clone:
+                #     print('queen side castling')
                 rook = self.chesspieces[piece.x-2][piece.y]
                 self.move_piece(rook, piece.x+1, piece.y)
 
@@ -154,10 +140,28 @@ class Board:
     # Returns if the given color is checked.
     # TODO: make this color agnostic
     # only working for a single color, user is white agent is black
+    # def is_check(self, color):
+    #     other_color = pieces.Piece.WHITE
+    #     if (color == pieces.Piece.WHITE):
+    #         other_color = pieces.Piece.BLACK
+
+    #     for move in self.get_possible_moves(other_color):
+    #         copy = Board.clone(self)
+    #         copy.perform_move(move)
+
+    #         king_found = False
+    #         for x in range(Board.WIDTH):
+    #             for y in range(Board.HEIGHT):
+    #                 piece = copy.chesspieces[x][y]
+    #                 if (piece != 0):
+    #                     if (piece.color == color and piece.piece_type == pieces.King.PIECE_TYPE):
+    #                         king_found = True
+
+    #         if (not king_found):
+    #             return True
+    #     return False
     def is_check(self, color):
-        other_color = pieces.Piece.WHITE
-        if (color == pieces.Piece.WHITE):
-            other_color = pieces.Piece.BLACK
+        other_color = pieces.Piece.WHITE if color == pieces.Piece.BLACK else pieces.Piece.BLACK
 
         for move in self.get_possible_moves(other_color):
             copy = Board.clone(self)
@@ -167,13 +171,12 @@ class Board:
             for x in range(Board.WIDTH):
                 for y in range(Board.HEIGHT):
                     piece = copy.chesspieces[x][y]
-                    if (piece != 0):
-                        if (piece.color == color and piece.piece_type == pieces.King.PIECE_TYPE):
-                            king_found = True
+                    if piece and piece.color == color and piece.piece_type == pieces.King.PIECE_TYPE:
+                        king_found = True
 
-            if (not king_found):
+            if not king_found:
+                print("check")
                 return True
-
         return False
 
     # Returns piece at given position or 0 if: No piece or out of bounds.
@@ -188,7 +191,6 @@ class Board:
 
     # converts the board to a string
     def to_string(self):
-        print(self.flip)
         if self.flip:
             return self.black_to_string()
         else:
@@ -215,7 +217,7 @@ class Board:
         string =  "    H  G  F  E  D  C  B  A\n"
         string += "    -----------------------\n"
         for y in reversed(range(Board.HEIGHT)):
-            string += str(y + 1) + " | "
+            string += str(8 - y) + " | "
             for x in reversed(range(Board.WIDTH)):
                 piece = self.chesspieces[x][y]
                 if (piece != 0):
