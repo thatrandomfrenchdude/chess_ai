@@ -2,12 +2,14 @@ import pieces
 from board import Board
 from agent import Ai, User
 
-# Reference
-# https://towardsdatascience.com/building-a-chess-ai-that-learns-from-experience-5cff953b6784
-
 # TODO: add AI vs AI --> need to clean up AI implementation
-# TODO: was able to castle through a knight king/rook fork as black --> illegal
-# TODO: was able to move king right two spaces w/o initiating castle
+# TODO: implement en passant
+# TODO: convert board represenation to 1D array
+# TODO: implement piece lookup table by reference
+# TODO: implement lazy evaluation of possible moves + caching
+# TODO: minimize memory usage by eliminating cloning --> bitboard?
+# TODO: optimize move generation
+# TODO: implement static evaluation function based on board state
 
 def choose_mode() -> str:
     mode = -1
@@ -41,9 +43,6 @@ class Chess():
 
         if mode == 'UvA':
             self.white, self.black, self.flip = choose_colors()
-            # self.white = Ai(pieces.Piece.WHITE)
-            # self.black = User(pieces.Piece.BLACK)
-            # self.flip = True
         elif mode == 'AvA':
             self.white = Ai(pieces.Piece.WHITE)
             self.black = Ai(pieces.Piece.BLACK)
@@ -85,9 +84,9 @@ class Chess():
             print("Black move: " + black_move.to_string())
             print(self.board.to_string())
 
-def main() -> None:
+def app() -> None:
     game = Chess()
     game.loop()
 
 if __name__ == '__main__':
-    main()
+    app()

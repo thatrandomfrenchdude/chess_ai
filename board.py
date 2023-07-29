@@ -76,19 +76,9 @@ class Board:
     def perform_move(self, move):
         # get the piece
         piece = self.chesspieces[move.xfrom][move.yfrom]
-        # if not self.is_clone:
-        #     print(piece)
-        #     print(move.xfrom, move.yfrom)
-        #     print(move.xto, move.yto)
-        #     for col in self.chesspieces:
-        #         print(col)
-        #     print('move')
         
         # increments piece on the board
         self.move_piece(piece, move.xto, move.yto)
-        # if not self.is_clone:
-        #     for col in self.chesspieces:
-        #         print(col)
 
         # TODO: implement en passant
         # If a pawn reaches the end, upgrade it to a queen.
@@ -107,28 +97,17 @@ class Board:
                 self.black_king_moved = True
             
             # Check if king-side castling
-            # if not self.is_clone:
-            #     print(f"xto: {move.xto} xfrom: {move.xfrom}")
-            #     print(f"to minus from: {move.xto - move.xfrom}")
             if (move.xto - move.xfrom == 2):
-                # if not self.is_clone:
-                #     print('king side castling')
                 rook = self.chesspieces[piece.x+1][piece.y]
-                # if not self.is_clone:
-                #     print(piece, piece.x, piece.y)
-                #     print(rook)
                 self.move_piece(rook, piece.x-1, piece.y)
             # Check if queen-side castling
             if (move.xto - move.xfrom == -2):
-                # if not self.is_clone:
-                #     print('queen side castling')
                 rook = self.chesspieces[piece.x-2][piece.y]
                 self.move_piece(rook, piece.x+1, piece.y)
 
     
     # why is this needed? --> updates state
     def move_piece(self, piece, xto, yto):
-        # print(piece)
         if piece != 0:  # added this
             self.chesspieces[piece.x][piece.y] = 0
             piece.x = xto
