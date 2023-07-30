@@ -104,7 +104,7 @@ class Board:
         if (piece.piece_type == pieces.Pawn.PIECE_TYPE):
             # Check if pawn moved two spaces and en passant is possible.
             # if yes, trigger flag
-
+            # TODO: need to figure out how to trigger and reset this flag correctly
 
             # If a pawn reaches the end, upgrade it to a queen.
             if (piece.y == 0 or piece.y == Board.HEIGHT-1):
