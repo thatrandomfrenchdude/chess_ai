@@ -85,6 +85,12 @@ class Board:
                 if piece != 0:
                     if piece.color == color:
                         moves += piece.get_possible_moves(self)
+        if not self.is_clone:
+            for move in moves:
+                try:
+                    print(move.to_string())
+                except:
+                    print(0)
         return moves
 
     def perform_move(self, move):
@@ -97,6 +103,7 @@ class Board:
         # TODO: implement en passant
         if (piece.piece_type == pieces.Pawn.PIECE_TYPE):
             # Check if pawn moved two spaces and en passant is possible.
+            # if yes, trigger flag
 
 
             # If a pawn reaches the end, upgrade it to a queen.

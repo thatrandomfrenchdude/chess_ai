@@ -56,8 +56,12 @@ class Chess():
 
         while True:
             # get the white move
+            # this is returning 0 for some reason
             white_move = self.white.move(self.board)
-            print(white_move)
+            print("hello")
+            if white_move != 0:
+                print(white_move.to_string())
+            print("hello")
             if (white_move == 0):
                 if (self.board.is_check(pieces.Piece.WHITE)):
                     print("Checkmate. Black Wins.")
@@ -71,11 +75,8 @@ class Chess():
             print(self.board.to_string())
 
             # black move
-            # this is returning 0 for some reason
             black_move = self.black.move(self.board)
-            print('hllo')
             print(black_move)
-            print('hllo')
             if (black_move == 0):
                 if (self.board.is_check(pieces.Piece.BLACK)):
                     print("Checkmate. White wins.")

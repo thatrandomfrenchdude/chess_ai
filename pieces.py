@@ -248,6 +248,11 @@ class Pawn(Piece):
     def get_possible_moves(self, board):
         moves = []
         direction = 1 if self.color == Piece.BLACK else -1
+        if not board.is_clone:
+            print('pawn get possible moves')
+            print(self.x, self.y)
+            print(direction)
+            print(self.can_en_passant(board))
         if board.get_piece(self.x, self.y + direction) == 0:
             moves.append(self.get_move(board, self.x, self.y + direction))
 
