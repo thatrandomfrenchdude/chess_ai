@@ -1,4 +1,4 @@
-import pieces
+from pieces import Piece
 from board import Board
 from agent import Ai, User
 
@@ -26,13 +26,13 @@ def choose_colors():
 
     if user_color == '0':
         print('user is white')
-        white = User(pieces.Piece.WHITE)
-        black = Ai(pieces.Piece.BLACK)
+        white = User(Piece.WHITE)
+        black = Ai(Piece.BLACK)
         flip = False
     elif user_color == '1':
         print("user is black")
-        white = Ai(pieces.Piece.WHITE)
-        black = User(pieces.Piece.BLACK)
+        white = Ai(Piece.WHITE)
+        black = User(Piece.BLACK)
         flip = True
     return white, black, flip
 
