@@ -10,6 +10,7 @@ class Board:
         self.black_king_moved = black_king_moved
         self.flip = flip
         self.is_clone = is_clone
+        self.reset_en_passant_flags()
 
     @classmethod
     def clone(cls, chessboard):
@@ -57,21 +58,34 @@ class Board:
 
         return cls(chess_pieces, False, False, flip)
 
+    # check en passant flags
+    def check_en_passant_flags(self, color):
+        for row in self.chesspieces:
+            for piece in row:
+                if piece and \
+                    piece.PIECE_TYPE == "P" and \
+                        piece.color != color and \
+                            piece.just_moved_two:
+                    return True
+        return False
+    
+    # reset the en passant flags
+    def reset_en_passant_flags(self):
+        for row in self.chesspieces:
+            for piece in row:
+                if piece and piece.PIECE_TYPE == "P":
+                    piece.just_moved_two = False
+
     # list all possible moves for a given piece at a given position
     def get_possible_moves(self, color):
         moves = []
         for x in range(Board.WIDTH):
             for y in range(Board.HEIGHT):
                 piece = self.chesspieces[x][y]
-                if (piece != 0):
-                    # was
-                    # if piece.colo == WHITE:
-                    # needs to apply for both colors
-                    if (piece.color == color):
+                if piece != 0:
+                    if piece.color == color:
                         moves += piece.get_possible_moves(self)
-
         return moves
-
 
     def perform_move(self, move):
         # get the piece
@@ -81,9 +95,11 @@ class Board:
         self.move_piece(piece, move.xto, move.yto)
 
         # TODO: implement en passant
-        # If a pawn reaches the end, upgrade it to a queen.
         if (piece.piece_type == pieces.Pawn.PIECE_TYPE):
-            # print('pawn moved')
+            # Check if pawn moved two spaces and en passant is possible.
+
+
+            # If a pawn reaches the end, upgrade it to a queen.
             if (piece.y == 0 or piece.y == Board.HEIGHT-1):
                 self.chesspieces[piece.x][piece.y] = pieces.Queen(piece.x, piece.y, piece.color)
 
@@ -105,10 +121,13 @@ class Board:
                 rook = self.chesspieces[piece.x-2][piece.y]
                 self.move_piece(rook, piece.x+1, piece.y)
 
+        self.reset_en_passant_flags()
+
     
     # why is this needed? --> updates state
     def move_piece(self, piece, xto, yto):
         if piece != 0:  # added this
+            piece.just_moved_two = (piece.PIECE_TYPE == "P" and abs(yto - piece.y) == 2)
             self.chesspieces[piece.x][piece.y] = 0
             piece.x = xto
             piece.y = yto

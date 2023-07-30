@@ -12,84 +12,48 @@ class Piece():
         self.piece_type = piece_type
         self.value = value
 
+    def get_possible_moves(self, board):
+        pass
+
     # Returns all diagonal moves for a bishop or queen
     def get_possible_diagonal_moves(self, board):
         moves = []
+        directions = [(1, 1), (1, -1), (-1, -1), (-1, 1)]
 
-        # convert to matrix multiplication if possible
-        for i in range(1, 8):
-            if (not board.in_bounds(self.x+i, self.y+i)):
-                break
+        for direction_x, direction_y in directions:
+            for i in range(1, 8):
+                new_x, new_y = self.x + i * direction_x, self.y + i * direction_y
+                if not board.in_bounds(new_x, new_y):
+                    break
 
-            piece = board.get_piece(self.x+i, self.y+i)
-            moves.append(self.get_move(board, self.x+i, self.y+i))
-            if (piece != 0):
-                break
+                piece = board.get_piece(new_x, new_y)
+                move = self.get_move(board, new_x, new_y)
+                if move:
+                    moves.append(move)
+                if piece != 0:
+                    break
 
-        for i in range(1, 8):
-            if (not board.in_bounds(self.x+i, self.y-i)):
-                break
+        return moves
 
-            piece = board.get_piece(self.x+i, self.y-i)
-            moves.append(self.get_move(board, self.x+i, self.y-i))
-            if (piece != 0):
-                break
-
-        for i in range(1, 8):
-            if (not board.in_bounds(self.x-i, self.y-i)):
-                break
-
-            piece = board.get_piece(self.x-i, self.y-i)
-            moves.append(self.get_move(board, self.x-i, self.y-i))
-            if (piece != 0):
-                break
-
-        for i in range(1, 8):
-            if (not board.in_bounds(self.x-i, self.y+i)):
-                break
-
-            piece = board.get_piece(self.x-i, self.y+i)
-            moves.append(self.get_move(board, self.x-i, self.y+i))
-            if (piece != 0):
-                break
-
-        return self.remove_null_from_list(moves)
 
     # Returns all horizontal moves for a rook or queen
-    # TODO: maintain possible positions as position moves instead of when move is inputed
     def get_possible_horizontal_moves(self, board):
         moves = []
+        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 
-        # Moves to the right of the piece.
-        for i in range(1, 8 - self.x):
-            piece = board.get_piece(self.x + i, self.y)
-            moves.append(self.get_move(board, self.x+i, self.y))
-
-            if (piece != 0):
-                break
-
-        # Moves to the left of the piece.
-        for i in range(1, self.x + 1):
-            piece = board.get_piece(self.x - i, self.y)
-            moves.append(self.get_move(board, self.x-i, self.y))
-            if (piece != 0):
-                break
-
-        # Downward moves.
-        for i in range(1, 8 - self.y):
-            piece = board.get_piece(self.x, self.y + i)
-            moves.append(self.get_move(board, self.x, self.y+i))
-            if (piece != 0):
-                break
-
-        # Upward moves.
-        for i in range(1, self.y + 1):
-            piece = board.get_piece(self.x, self.y - i)
-            moves.append(self.get_move(board, self.x, self.y-i))
-            if (piece != 0):
-                break
+        for direction_x, direction_y in directions:
+            limit = self.x if direction_x != 0 else self.y
+            for i in range(1, 8 - limit):
+                new_x, new_y = self.x + i * direction_x, self.y + i * direction_y
+                piece = board.get_piece(new_x, new_y)
+                move = self.get_move(board, new_x, new_y)
+                if move:
+                    moves.append(move)
+                if piece != 0:
+                    break
 
         return self.remove_null_from_list(moves)
+
 
     # Returns a Move object with (xfrom, yfrom) set to the piece current position.
     # (xto, yto) is set to the given position. If the move is not valid 0 is returned.
@@ -136,17 +100,17 @@ class Knight(Piece):
 
     def get_possible_moves(self, board):
         moves = []
+        offsets = [
+            (2, 1), (-1, 2), (-2, 1), (1, -2),
+            (2, -1), (1, 2), (-2, -1), (-1, -2)
+        ]
 
-        moves.append(self.get_move(board, self.x+2, self.y+1))
-        moves.append(self.get_move(board, self.x-1, self.y+2))
-        moves.append(self.get_move(board, self.x-2, self.y+1))
-        moves.append(self.get_move(board, self.x+1, self.y-2))
-        moves.append(self.get_move(board, self.x+2, self.y-1))
-        moves.append(self.get_move(board, self.x+1, self.y+2))
-        moves.append(self.get_move(board, self.x-2, self.y-1))
-        moves.append(self.get_move(board, self.x-1, self.y-2))
+        for offset_x, offset_y in offsets:
+            move = self.get_move(board, self.x + offset_x, self.y + offset_y)
+            if move:
+                moves.append(move)
 
-        return self.remove_null_from_list(moves)
+        return moves
 
     def clone(self):
         return Knight(self.x, self.y, self.color)
@@ -189,22 +153,6 @@ class King(Piece):
     def __init__(self, x, y, color):
         super(King, self).__init__(x, y, color, King.PIECE_TYPE, King.VALUE)
 
-    # def get_possible_moves(self, board):
-    #     moves = []
-
-    #     moves.append(self.get_move(board, self.x+1, self.y))
-    #     moves.append(self.get_move(board, self.x+1, self.y+1))
-    #     moves.append(self.get_move(board, self.x, self.y+1))
-    #     moves.append(self.get_move(board, self.x-1, self.y+1))
-    #     moves.append(self.get_move(board, self.x-1, self.y))
-    #     moves.append(self.get_move(board, self.x-1, self.y-1))
-    #     moves.append(self.get_move(board, self.x, self.y-1))
-    #     moves.append(self.get_move(board, self.x+1, self.y-1))
-
-    #     moves.append(self.get_castle_kingside_move(board))
-    #     moves.append(self.get_castle_queenside_move(board))
-
-    #     return self.remove_null_from_list(moves)
     def get_possible_moves(self, board):
         moves = []
 
@@ -279,37 +227,40 @@ class Pawn(Piece):
 
     def __init__(self, x, y, color):
         super(Pawn, self).__init__(x, y, color, Pawn.PIECE_TYPE, Pawn.VALUE)
+        self.just_moved_two = False
 
     def is_starting_position(self):
-        if (self.color == Piece.BLACK):
-            return self.y == 1
-        else:
-            return self.y == 8 - 2
+        return self.y == 1 if self.color == Piece.BLACK else self.y == 6
+
+    def can_en_passant(self, board):
+        # target_pawn = board.get_piece(x, y)
+        piece_left = board.get_piece(self.x - 1, self.y)
+        piece_right = board.get_piece(self.x + 1, self.y)
+        
+        if piece_left == 0 or piece_right == 0:
+            return False
+        elif (piece_left.piece_type == Pawn.PIECE_TYPE and piece_left.color != self.color and piece_left.just_moved_two) or \
+            (piece_right.piece_type == Pawn.PIECE_TYPE and piece_right.color != self.color and piece_right.just_moved_two):
+            print("En passant!")
+            return True
+        return False
 
     def get_possible_moves(self, board):
         moves = []
-
-        # Direction the pawn can move in.
-        direction = -1
-        if (self.color == Piece.BLACK):
-            direction = 1
-
-        # The general 1 step forward move.
-        if (board.get_piece(self.x, self.y+direction) == 0):
+        direction = 1 if self.color == Piece.BLACK else -1
+        if board.get_piece(self.x, self.y + direction) == 0:
             moves.append(self.get_move(board, self.x, self.y + direction))
 
-        # The Pawn can take 2 steps as the first move.
-        if (self.is_starting_position() and board.get_piece(self.x, self.y+ direction) == 0 and board.get_piece(self.x, self.y + direction*2) == 0):
+        if self.is_starting_position() and board.get_piece(self.x, self.y + direction) == 0 and board.get_piece(self.x, self.y + direction * 2) == 0:
             moves.append(self.get_move(board, self.x, self.y + direction * 2))
 
-        # Eating pieces.
-        piece = board.get_piece(self.x + 1, self.y + direction)
-        if (piece != 0):
-            moves.append(self.get_move(board, self.x + 1, self.y + direction))
-
-        piece = board.get_piece(self.x - 1, self.y + direction)
-        if (piece != 0):
-            moves.append(self.get_move(board, self.x - 1, self.y + direction))
+        for dx in [-1, 1]:
+            piece = board.get_piece(self.x + dx, self.y + direction)
+            if piece != 0 and piece.color != self.color:
+                moves.append(self.get_move(board, self.x + dx, self.y + direction))
+            if self.can_en_passant(board):
+                moves.append(self.get_move(board, self.x + dx, self.y + direction))
+                print("Appended en passant!")
 
         return self.remove_null_from_list(moves)
 

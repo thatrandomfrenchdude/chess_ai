@@ -58,6 +58,7 @@ class Ai(Agent):
                 break
             else:
                 print("Invalid move.")
+        print(move)
         return move
 
 class User(Agent):
@@ -85,7 +86,10 @@ class User(Agent):
             
             # get user input
             move = self.get_user_move()
-            possible_moves = board.get_possible_moves(self.color)
+            print(f"user move: {move.to_string()}")
+            # change this to work on a piece
+            # possible_moves = board.get_possible_moves(self.color)
+            possible_moves = board.get_possible_moves(board.get_piece(move.xfrom, move.yfrom))
             
             # No possible moves
             if (not possible_moves):
