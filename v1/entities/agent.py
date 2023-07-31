@@ -1,5 +1,5 @@
-import ai
-from move import Move
+from ai.ai import AI
+from objects.move import Move
 
 class Agent:
     def __init__(self, color) -> None:
@@ -33,7 +33,7 @@ class Agent:
 class Ai(Agent):
     def ai_move(self, board):
         # is this hardcoded to black?
-        return ai.AI.get_ai_move(board, self.color, [])
+        return AI.get_ai_move(board, self.color, [])
 
     def move(self, board):
         print("AI is thinking...")

@@ -1,6 +1,6 @@
-from board import Board
-from agent import Ai, User
+from objects.board import Board
 from objects.color import Color
+from entities.agent import Ai, User
 
 # TODO: add AI vs AI --> need to clean up AI implementation
 # TODO: implement en passant

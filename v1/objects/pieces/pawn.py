@@ -1,5 +1,5 @@
 # import ai
-from pieces.piece import Piece
+from objects.pieces.piece import Piece
 from objects.color import Color
 
 

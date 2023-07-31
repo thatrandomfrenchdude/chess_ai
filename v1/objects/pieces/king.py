@@ -1,6 +1,6 @@
-from move import Move
-from pieces.piece import Piece
-from pieces.rook import Rook
+from objects.move import Move
+from objects.pieces.piece import Piece
+from objects.pieces.rook import Rook
 from objects.color import Color
 
 class King(Piece):

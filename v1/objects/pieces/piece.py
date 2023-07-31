@@ -1,4 +1,4 @@
-from move import Move
+from objects.move import Move
 from objects.color import Color
 
 

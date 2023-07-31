@@ -1,4 +1,4 @@
-from pieces.piece import Piece
+from objects.pieces.piece import Piece
 
 class Rook(Piece):
     PIECE_TYPE = "R"

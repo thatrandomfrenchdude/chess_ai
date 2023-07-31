@@ -1,9 +1,9 @@
-from pieces.bishop import Bishop
-from pieces.king import King
-from pieces.knight import Knight
-from pieces.pawn import Pawn
-from pieces.queen import Queen
-from pieces.rook import Rook
+from objects.pieces.bishop import Bishop
+from objects.pieces.king import King
+from objects.pieces.knight import Knight
+from objects.pieces.pawn import Pawn
+from objects.pieces.queen import Queen
+from objects.pieces.rook import Rook
 from objects.color import Color
 
 class Board:
