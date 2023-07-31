@@ -1,7 +1,7 @@
 from pieces.piece import Piece
 
 class Rook(Piece):
-    PIECE_TYPE = "r"
+    PIECE_TYPE = "R"
     VALUE = 500
 
     def __init__(self, x, y, color):

@@ -1,7 +1,7 @@
 from pieces.piece import Piece
 
 class Knight(Piece):
-    PIECE_TYPE = "n"
+    PIECE_TYPE = "N"
     VALUE = 320
 
     def __init__(self, x, y, color):
