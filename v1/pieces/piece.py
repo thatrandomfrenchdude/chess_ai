@@ -72,4 +72,7 @@ class Piece():
         return [move for move in l if move != 0]
 
     def to_string(self):
-        return self.color + self.piece_type + " "
+        if self.color == 0:
+            return "W" + self.piece_type + " "
+        else:
+            return "B" + self.piece_type + " "

@@ -19,7 +19,7 @@ class Board:
         
         # save the starting board state
         if not is_clone:
-            self.board_state_record = [self.clone()]
+            self.board_state_record = [self.clone(self)]
 
     @classmethod
     def clone(cls, chessboard):
@@ -88,7 +88,7 @@ class Board:
     # save the current board state
     def save_board_state(self):
         if not self.is_clone:
-            self.board_state_record.append(self.clone())
+            self.board_state_record.append(self.clone(self))
 
     # lists all possible moves for a given color on the board
     # TODO: remove this function

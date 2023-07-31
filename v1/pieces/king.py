@@ -37,10 +37,10 @@ class King(Piece):
             return 0
         
         # If the king has moved, we cannot castle
-        if (self.color == Piece.WHITE and board.white_king_moved):
+        if (self.color == 0 and board.white_king_moved):
             return 0
         
-        if (self.color == Piece.BLACK and board.black_king_moved):
+        if (self.color == 1 and board.black_king_moved):
             return 0
 
         # If there are pieces in between the king and rook we cannot castle
@@ -60,10 +60,10 @@ class King(Piece):
             return 0
         
         # If the king has moved, we cannot castle
-        if (self.color == Piece.WHITE and board.white_king_moved):
+        if (self.color == 0 and board.white_king_moved):
             return 0
         
-        if (self.color == Piece.BLACK and board.black_king_moved):
+        if (self.color == 1 and board.black_king_moved):
             return 0
 
         # If there are pieces in between the king and rook we cannot castle
