@@ -1,4 +1,5 @@
 import board, pieces, numpy
+from objects.color import Color
 
 class Heuristics:
 
@@ -83,7 +84,7 @@ class Heuristics:
                 piece = board.chesspieces[x][y]
                 if (piece != 0):
                     if (piece.piece_type == piece_type):
-                        if (piece.color == pieces.Piece.WHITE):
+                        if (piece.color == Color.WHITE):
                             white += table[x][y]
                         else:
                             black += table[7 - x][y]

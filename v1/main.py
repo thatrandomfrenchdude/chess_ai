@@ -40,12 +40,15 @@ def choose_colors():
 class Chess():
     def __init__(self) -> None:
         # choose run mode
-        mode = choose_mode()
-        # mode = 'UvA'
+        # mode = choose_mode()
+        mode = 'UvA'
 
         # define modes
         if mode == 'UvA':
-            self.white_agent, self.black_agent, self.flip = choose_colors()
+            # self.white_agent, self.black_agent, self.flip = choose_colors()
+            self.white_agent = User(Color.WHITE)
+            self.black_agent = Ai(Color.BLACK)
+            self.flip = False
         elif mode == 'AvA':
             self.white_agent = Ai(Color.WHITE)
             self.black_agent = Ai(Color.BLACK)

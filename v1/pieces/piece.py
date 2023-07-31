@@ -1,4 +1,5 @@
 from move import Move
+from objects.color import Color
 
 
 class Piece():
@@ -72,7 +73,7 @@ class Piece():
         return [move for move in l if move != 0]
 
     def to_string(self):
-        if self.color == 0:
+        if self.color == Color.WHITE:
             return "W" + self.piece_type + " "
         else:
             return "B" + self.piece_type + " "

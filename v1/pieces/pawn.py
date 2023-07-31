@@ -1,5 +1,6 @@
 # import ai
 from pieces.piece import Piece
+from objects.color import Color
 
 
 class Pawn(Piece):
@@ -11,7 +12,7 @@ class Pawn(Piece):
         self.just_moved_two = False
 
     def is_starting_position(self):
-        return self.y == 1 if self.color == 1 else self.y == 6
+        return self.y == 1 if self.color == Color.BLACK else self.y == 6
 
     # check if piece to left of pawn has just moved two from starting position
     def en_passant_left(self, board):
@@ -61,7 +62,7 @@ class Pawn(Piece):
 
     def get_possible_moves(self, board):
         moves = []
-        direction = 1 if self.color == 1 else -1
+        direction = 1 if self.color == Color.BLACK else -1
         if not board.is_clone:
             print('pawn get possible moves')
             print(self.x, self.y)
@@ -80,7 +81,7 @@ class Pawn(Piece):
 
         # append en passant if applicable
         # TODO: check that these coordinates are correct for left and right
-        if self.color == 0:
+        if self.color == Color.WHITE:
             if self.en_passant_left(board):
                 moves.append(self.get_move(board, self.x - 1, self.y - 1))
             if self.en_passant_right(board):
