@@ -14,51 +14,34 @@ class Pawn(Piece):
     def is_starting_position(self):
         return self.y == 1 if self.color == Color.BLACK else self.y == 6
 
+    # TODO: merge these two functions
+    # confirmed working as white with left en passant possible
     # check if piece to left of pawn has just moved two from starting position
     def en_passant_left(self, board):
-        # target_pawn = board.get_piece(x, y)
+        # assumes board oriented with white along the bottom
         piece_left = board.get_piece(self.x - 1, self.y)
-        piece_right = board.get_piece(self.x + 1, self.y)
         
-        if piece_left == 0 or piece_right == 0:
+        if piece_left == 0:
             return False 
-        elif (piece_left.piece_type == Pawn.PIECE_TYPE and piece_left.color != self.color and piece_left.just_moved_two) or \
-            (piece_right.piece_type == Pawn.PIECE_TYPE and piece_right.color != self.color and piece_right.just_moved_two):
-            print("En passant!")
-            return True
+        else:
+            if piece_left.piece_type == Pawn.PIECE_TYPE and \
+                piece_left.color != self.color and \
+                piece_left.just_moved_two:
+                print("En passant left!")
+                return True
         return False
     
     # check if piece to right of pawn has just moved two from starting position
     def en_passant_right(self, board):
-        # target_pawn = board.get_piece(x, y)
-        piece_left = board.get_piece(self.x - 1, self.y)
+        # assumes board oriented with white along the bottom
         piece_right = board.get_piece(self.x + 1, self.y)
         
-        if piece_left == 0 or piece_right == 0:
+        if piece_right == 0:
             return False 
-        elif (piece_left.piece_type == Pawn.PIECE_TYPE and piece_left.color != self.color and piece_left.just_moved_two) or \
-            (piece_right.piece_type == Pawn.PIECE_TYPE and piece_right.color != self.color and piece_right.just_moved_two):
-            print("En passant!")
+        elif piece_right.piece_type == Pawn.PIECE_TYPE and piece_right.color != self.color and piece_right.just_moved_two:
+            print("En passant right!")
             return True
         return False
-    
-    # check en passant to left and right of current pawn
-    # def check_en_passant(self, board, move):
-    #     left = False
-    #     right = False
-    #     if self.color == Piece.WHITE:
-    #         if self.en_passant_left(board):
-    #             # take the piece
-    #             # board.chesspieces[self.x - 1][self.y] = 0
-    #             left = True
-    #         elif self.en_passant_right(board):
-    #             # take the piece
-    #             # board.chesspieces[self.x + 1][self.y] = 0
-    #             right = True
-    #     else:
-    #         # black
-    #         pass
-    #     return left, right
 
     def get_possible_moves(self, board):
         moves = []
