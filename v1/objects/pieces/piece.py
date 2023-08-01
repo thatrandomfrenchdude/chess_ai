@@ -10,6 +10,12 @@ class Piece():
         self.piece_type: str = piece_type
         self.value: int = value
 
+    def is_white(self):
+        # notes
+        # not 0 = True
+        # not 1 = False
+        return not self.color
+
     def get_possible_moves(self, board):
         pass
 

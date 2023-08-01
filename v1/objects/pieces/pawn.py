@@ -15,10 +15,14 @@ class Pawn(Piece):
         return self.y == 1 if self.color == Color.BLACK else self.y == 6
 
     # TODO: merge these two functions
+    # TODO: refine color checking?
     # confirmed working as white with left en passant possible
     # check if piece to left of pawn has just moved two from starting position
     def en_passant_left(self, board):
         # assumes board oriented with white along the bottom
+        if not board.is_clone:
+            if self.is_white():
+                print("white pawn")
         piece_left = board.get_piece(self.x - 1, self.y)
         
         if piece_left == 0:
