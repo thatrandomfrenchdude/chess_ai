@@ -1,4 +1,4 @@
-import pieces
+from pieces import Piece
 from board import Board
 from agent import Ai, User
 
@@ -26,13 +26,13 @@ def choose_colors():
 
     if user_color == '0':
         print('user is white')
-        white = User(pieces.Piece.WHITE)
-        black = Ai(pieces.Piece.BLACK)
+        white = User(Piece.WHITE)
+        black = Ai(Piece.BLACK)
         flip = False
     elif user_color == '1':
         print("user is black")
-        white = Ai(pieces.Piece.WHITE)
-        black = User(pieces.Piece.BLACK)
+        white = Ai(Piece.WHITE)
+        black = User(Piece.BLACK)
         flip = True
     return white, black, flip
 
@@ -56,7 +56,12 @@ class Chess():
 
         while True:
             # get the white move
+            # this is returning 0 for some reason
             white_move = self.white.move(self.board)
+            print("hello")
+            if white_move != 0:
+                print(white_move.to_string())
+            print("hello")
             if (white_move == 0):
                 if (self.board.is_check(pieces.Piece.WHITE)):
                     print("Checkmate. Black Wins.")
@@ -67,11 +72,11 @@ class Chess():
 
             # perform the move 
             self.board.perform_move(white_move)
-            print("White move: " + white_move.to_string())
             print(self.board.to_string())
 
             # black move
             black_move = self.black.move(self.board)
+            print(black_move)
             if (black_move == 0):
                 if (self.board.is_check(pieces.Piece.BLACK)):
                     print("Checkmate. White wins.")
@@ -82,7 +87,6 @@ class Chess():
 
             # perform the move
             self.board.perform_move(black_move)
-            print("Black move: " + black_move.to_string())
             print(self.board.to_string())
 
 def app() -> None:

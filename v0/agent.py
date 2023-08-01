@@ -36,6 +36,7 @@ class Ai(Agent):
         return ai.AI.get_ai_move(board, self.color, [])
 
     def move(self, board):
+        print("AI is thinking...")
         while True:
             move = self.ai_move(board)
             valid = False
@@ -85,7 +86,11 @@ class User(Agent):
             
             # get user input
             move = self.get_user_move()
+            print(f"user move: {move.to_string()}")
+            # change this to work on a piece
             possible_moves = board.get_possible_moves(self.color)
+            # possible_moves = board.get_possible_moves(self.color)
+            # print(f"possible moves: {possible_moves}")
             
             # No possible moves
             if (not possible_moves):
