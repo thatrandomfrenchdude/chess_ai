@@ -86,7 +86,6 @@ class User(Agent):
             
             # get user input
             move = self.get_user_move()
-            print(f"user move: {move.to_string()}")
             # change this to work on a piece
             possible_moves = board.get_possible_moves(self.color)
             # possible_moves = board.get_possible_moves(self.color)

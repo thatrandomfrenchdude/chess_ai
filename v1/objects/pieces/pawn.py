@@ -14,6 +14,8 @@ class Pawn(Piece):
     def is_starting_position(self):
         return self.y == 1 if self.color == Color.BLACK else self.y == 6
 
+    # checks to see if en passant is possible
+    # returns a list with a move for each side if possible
     def en_passant(self, board):
         ans = []
 
@@ -30,13 +32,8 @@ class Pawn(Piece):
         if self.en_passant_right(r_piece):
             ans.append(self.get_move(board, r_x, self.y - 1 if self.is_white() else self.y + 1))
 
-        # assumes board oriented with white along the bottom
-        # return self.en_passant_left(l_piece), self.en_passant_right(r_piece)
         return ans
 
-    # TODO: merge these two functions
-    # confirmed working as white with left en passant possible
-    # check if piece to left of pawn has just moved two from starting position
     def en_passant_left(self, piece):
         # make sure there is a piece to the left
         if piece == 0:
@@ -45,11 +42,10 @@ class Pawn(Piece):
             if piece.piece_type == Pawn.PIECE_TYPE and \
                 piece.color is not self.color and \
                 piece.just_moved_two:
-                print("En passant left!")
+                # print("En passant left is possible!")
                 return True
         return False
     
-    # check if piece to right of pawn has just moved two from starting position
     def en_passant_right(self, piece):
         # make sure there is a piece to the right
         if piece == 0:
@@ -58,7 +54,7 @@ class Pawn(Piece):
             if piece.piece_type == Pawn.PIECE_TYPE and \
                 piece.color is not self.color and \
                 piece.just_moved_two:
-                print("En passant right!")
+                # print("En passant right is possible!")
                 return True
         return False
 
@@ -66,11 +62,6 @@ class Pawn(Piece):
     def get_possible_moves(self, board):
         moves = []
         direction = 1 if self.color == Color.BLACK else -1
-        if not board.is_clone:
-            print('pawn get possible moves')
-            print(self.x, self.y)
-            print(direction)
-            # print(self.can_en_passant(board))
         if board.get_piece(self.x, self.y + direction) == 0:
             moves.append(self.get_move(board, self.x, self.y + direction))
 
@@ -84,20 +75,6 @@ class Pawn(Piece):
 
         # append en passant if applicable
         moves.extend(self.en_passant(board))
-        # TODO: check that these coordinates are correct for left and right
-        # if self.is_white():
-        #     # get sides
-        #     left, right = self.en_passant(board)
-            
-        #     if left:
-        #         moves.append(self.get_move(board, self.x - 1, self.y - 1))
-        #     if right:
-        #         moves.append(self.get_move(board, self.x + 1, self.y - 1))
-        # else:
-        #     if self.en_passant_left(board):
-        #         moves.append(self.get_move(board, self.x + 1, self.y + 1))
-        #     if self.en_passant_right(board):
-        #         moves.append(self.get_move(board, self.x - 1, self.y + 1))
 
         return self.remove_null_from_list(moves)
 

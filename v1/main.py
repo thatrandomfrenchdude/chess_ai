@@ -40,15 +40,15 @@ def choose_colors():
 class Chess():
     def __init__(self) -> None:
         # choose run mode
-        # mode = choose_mode()
-        mode = 'UvA'
+        mode = choose_mode()
+        # mode = 'UvA'
 
         # define modes
         if mode == 'UvA':
-            # self.white_agent, self.black_agent, self.flip = choose_colors()
-            self.white_agent = User(Color.WHITE)
-            self.black_agent = Ai(Color.BLACK)
-            self.flip = False
+            self.white_agent, self.black_agent, self.flip = choose_colors()
+            # self.white_agent = User(Color.WHITE)
+            # self.black_agent = Ai(Color.BLACK)
+            # self.flip = False
         elif mode == 'AvA':
             self.white_agent = Ai(Color.WHITE)
             self.black_agent = Ai(Color.BLACK)
@@ -61,12 +61,8 @@ class Chess():
 
         while True:
             # get the white move
-            # this is returning 0 for some reason
             white_move = self.white_agent.move(self.board)
-            print("hello")
-            if white_move != 0:
-                print(white_move.to_string())
-            print("hello")
+            print(white_move.to_string())
             if (white_move == 0):
                 if (self.board.is_check(Color.WHITE)):
                     print("Checkmate. Black Wins.")
@@ -81,7 +77,7 @@ class Chess():
 
             # black move
             black_move = self.black_agent.move(self.board)
-            print(black_move)
+            print(black_move.to_string())
             if (black_move == 0):
                 if (self.board.is_check(Color.BLACK)):
                     print("Checkmate. White wins.")
