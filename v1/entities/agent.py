@@ -8,28 +8,6 @@ class Agent:
     def move(self, board):
         pass
 
-    # Converts a letter (A-H) to the x position on the chess board.
-    def letter_to_xpos(self, letter):
-        letter = letter.upper()
-        if letter == 'A':
-            return 0
-        if letter == 'B':
-            return 1
-        if letter == 'C':
-            return 2
-        if letter == 'D':
-            return 3
-        if letter == 'E':
-            return 4
-        if letter == 'F':
-            return 5
-        if letter == 'G':
-            return 6
-        if letter == 'H':
-            return 7
-
-        raise ValueError("Invalid letter.")
-
 class Ai(Agent):
     def ai_move(self, board):
         # is this hardcoded to black?
@@ -105,3 +83,25 @@ class User(Agent):
             else:
                 print("Invalid move.")
         return move
+    
+    # Converts a letter (A-H) to the x position on the chess board.
+    def letter_to_xpos(self, letter):
+        letter = letter.upper()
+        if letter == 'A':
+            return 0
+        if letter == 'B':
+            return 1
+        if letter == 'C':
+            return 2
+        if letter == 'D':
+            return 3
+        if letter == 'E':
+            return 4
+        if letter == 'F':
+            return 5
+        if letter == 'G':
+            return 6
+        if letter == 'H':
+            return 7
+
+        raise ValueError("Invalid letter.")
