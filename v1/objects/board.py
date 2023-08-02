@@ -6,6 +6,8 @@ from objects.pieces.queen import Queen
 from objects.pieces.rook import Rook
 from objects.color import Color
 
+# TODO: add stalemate check on repeats
+
 class Board:
     WIDTH = 8
     HEIGHT = 8
