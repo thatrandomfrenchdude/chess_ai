@@ -27,6 +27,7 @@ class Pawn(Piece):
         l_piece = board.get_piece(l_x, self.y)
         r_piece = board.get_piece(r_x, self.y)
 
+        # TODO: check last state for just moved two
         if self.en_passant_left(l_piece):
             ans.append(self.get_move(board, l_x, self.y - 1 if self.is_white() else self.y + 1))
         if self.en_passant_right(r_piece):

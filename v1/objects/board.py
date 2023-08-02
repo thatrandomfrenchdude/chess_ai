@@ -34,7 +34,7 @@ class Board:
     # creates a new chess board
     @classmethod
     def new(cls, flip=False):
-        chess_pieces = [[0 for x in range(Board.WIDTH)] for y in range(Board.HEIGHT)]
+        chess_pieces = [[0 for _ in range(Board.WIDTH)] for _ in range(Board.HEIGHT)]
         
         # Create pawns.
         for x in range(Board.WIDTH):
@@ -66,17 +66,6 @@ class Board:
         chess_pieces[3][0] = Queen(3, 0, Color.BLACK)
 
         return cls(chess_pieces, False, False, flip)
-
-    # # check en passant flags
-    # def check_en_passant_flags(self, color):
-    #     for row in self.chesspieces:
-    #         for piece in row:
-    #             if piece and \
-    #                 piece.PIECE_TYPE == "P" and \
-    #                     piece.color != color and \
-    #                         piece.just_moved_two:
-    #                 return True
-    #     return False
     
     # reset the en passant flags
     def reset_en_passant_flags(self):
@@ -103,6 +92,7 @@ class Board:
         return moves
     
     # TODO: confirm implementation
+    # TODO: implementation for black?
     def check_en_passant(self, piece, move):
         # delete the pawn that just got passed
         if piece.color == Color.WHITE and \

@@ -64,10 +64,9 @@ class User(Agent):
             
             # get user input
             move = self.get_user_move()
-            # change this to work on a piece
+
             possible_moves = board.get_possible_moves(self.color)
             # possible_moves = board.get_possible_moves(self.color)
-            # print(f"possible moves: {possible_moves}")
             
             # No possible moves
             if (not possible_moves):
