@@ -1,3 +1,3 @@
 class Color:
-    WHITE = 0
-    BLACK = 1
+    WHITE: int = 0
+    BLACK: int = 1

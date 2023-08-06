@@ -4,7 +4,6 @@ from entities.user import User
 from entities.ai import Ai
 
 # TODO: add AI vs AI --> need to clean up AI implementation
-# TODO: fix en passant implementation
 # TODO: convert board represenation to 1D array
 # TODO: implement piece lookup table by reference
 # TODO: implement lazy evaluation of possible moves + caching to db by state --> valid moves of piece p in position x,y and all other board positions
@@ -22,6 +21,7 @@ class Chess():
         # generate a new board (we always need one)
         flip = False  # always default to false
         self.board = Board.new(flip)
+        self.move_history = []
 
         # choose run mode
         mode = self.choose_mode()
@@ -55,39 +55,48 @@ class Chess():
         return False if user_color == '0' else True
 
     def loop(self) -> None:
-        # print board to console
-        print(self.board.to_string())
-
-        while True:
-            # get the white move
-            white_move = self.white_agent.move()
-            print(white_move.to_string())
-            if (white_move == 0):
-                if (self.board.is_check(Color.WHITE)):
-                    print("Checkmate. Black Wins.")
-                    break
-                else:
-                    print("Stalemate.")
-                    break
-
-            # perform the move 
-            self.board.perform_move(white_move)
+        try:
+            # print board to console
             print(self.board.to_string())
 
-            # black move
-            black_move = self.black_agent.move()
-            print(black_move.to_string())
-            if (black_move == 0):
-                if (self.board.is_check(Color.BLACK)):
-                    print("Checkmate. White wins.")
-                    break
-                else:
-                    print("Stalemate.")
-                    break
+            while True:
+                # get the white move
+                white_move = self.white_agent.move()
+                print(white_move.to_string())
+                if (white_move == 0):
+                    if (self.board.is_check(Color.WHITE)):
+                        print("Checkmate. Black Wins.")
+                        break
+                    else:
+                        print("Stalemate.")
+                        break
 
-            # perform the move
-            self.board.perform_move(black_move)
-            print(self.board.to_string())
+                # perform the move 
+                self.board.perform_move(white_move)
+                print(self.board.to_string())
+
+                # black move
+                black_move = self.black_agent.move()
+                print(black_move.to_string())
+                if (black_move == 0):
+                    if (self.board.is_check(Color.BLACK)):
+                        print("Checkmate. White wins.")
+                        break
+                    else:
+                        print("Stalemate.")
+                        break
+
+                # perform the move
+                self.board.perform_move(black_move)
+                print(self.board.to_string())
+        except:
+            print("Game Over")
+            self.print_game_record()
+        
+    def print_game_record(self) -> None:
+        for state in self.board.board_state_record:
+            # print(state.to_string())
+            print(state)
 
 def app() -> None:
     game = Chess()

@@ -4,7 +4,7 @@ from objects.pieces.knight import Knight
 from objects.pieces.pawn import Pawn
 from objects.pieces.queen import Queen
 from objects.pieces.rook import Rook
-from objects.color import Color
+from objects.color import Color  # int, 0:1::white:black
 
 # TODO: add stalemate check on repeats
 
@@ -12,16 +12,19 @@ class Board:
     WIDTH = 8
     HEIGHT = 8
 
+
+    # TODO: add board type as input so use has option to select representation
     def __init__(self, chesspieces, white_king_moved, black_king_moved, flip, is_clone=False):
         self.chesspieces = chesspieces
         self.white_king_moved = white_king_moved
         self.black_king_moved = black_king_moved
         self.flip = flip
         self.is_clone = is_clone
-        
+        self.board_states = [self.clone(self)] if not self.is_clone else None
+
         # save the starting board state
         if not is_clone:
-            self.board_state_record = [self.clone(self)]
+            self.board_states = [self.clone(self)]
 
     @classmethod
     def clone(cls, chessboard):
@@ -36,6 +39,24 @@ class Board:
     # creates a new chess board
     @classmethod
     def new(cls, flip=False):
+        return cls(cls.generate_board(), False, False, flip)
+    
+    # creates a new chess board of type t, where t is in ['2d', 'hash', '1d']
+    def generate_board(self, t="2d"):
+        if t == "2d":
+            return self.d2()
+        elif t == "hash":
+            return self.hash()
+        elif t == "1d":
+            self.d1()
+        else:
+            raise ValueError("Invalid board type.")
+
+    
+    # generates a 2d chess board
+    @staticmethod
+    def d2():
+        # 2D piece representation
         chess_pieces = [[0 for _ in range(Board.WIDTH)] for _ in range(Board.HEIGHT)]
         
         # Create pawns.
@@ -67,7 +88,96 @@ class Board:
         chess_pieces[4][0] = King(4, 0, Color.BLACK)
         chess_pieces[3][0] = Queen(3, 0, Color.BLACK)
 
-        return cls(chess_pieces, False, False, flip)
+        return chess_pieces
+    
+    # generates a hash table chess board
+    # TODO: implement
+    @staticmethod
+    def hash():
+        raise NotImplementedError
+    
+        # hash table representation w/ ordered lists
+        self.hash_chesspieces = {
+            'a': [0 for _ in range(8)],
+            'b': [0 for _ in range(8)],
+            'c': [0 for _ in range(8)],
+            'd': [0 for _ in range(8)],
+            'e': [0 for _ in range(8)],
+            'f': [0 for _ in range(8)],
+            'g': [0 for _ in range(8)],
+            'h': [0 for _ in range(8)]
+        }
+
+        # # Create pawns.
+        # for x in range(Board.WIDTH):
+        #     chess_pieces[x][Board.HEIGHT-2] = Pawn(x, Board.HEIGHT-2, Color.WHITE)
+        #     chess_pieces[x][1] = Pawn(x, 1, Color.BLACK)
+
+        # # Create rooks.
+        # chess_pieces[0][Board.HEIGHT-1] = Rook(0, Board.HEIGHT-1, Color.WHITE)
+        # chess_pieces[Board.WIDTH-1][Board.HEIGHT-1] = Rook(Board.WIDTH-1, Board.HEIGHT-1, Color.WHITE)
+        # chess_pieces[0][0] = Rook(0, 0, Color.BLACK)
+        # chess_pieces[Board.WIDTH-1][0] = Rook(Board.WIDTH-1, 0, Color.BLACK)
+
+        # # Create Knights.
+        # chess_pieces[1][Board.HEIGHT-1] = Knight(1, Board.HEIGHT-1, Color.WHITE)
+        # chess_pieces[Board.WIDTH-2][Board.HEIGHT-1] = Knight(Board.WIDTH-2, Board.HEIGHT-1, Color.WHITE)
+        # chess_pieces[1][0] = Knight(1, 0, Color.BLACK)
+        # chess_pieces[Board.WIDTH-2][0] = Knight(Board.WIDTH-2, 0, Color.BLACK)
+
+        # # Create Bishops.
+        # chess_pieces[2][Board.HEIGHT-1] = Bishop(2, Board.HEIGHT-1, Color.WHITE)
+        # chess_pieces[Board.WIDTH-3][Board.HEIGHT-1] = Bishop(Board.WIDTH-3, Board.HEIGHT-1, Color.WHITE)
+        # chess_pieces[2][0] = Bishop(2, 0, Color.BLACK)
+        # chess_pieces[Board.WIDTH-3][0] = Bishop(Board.WIDTH-3, 0, Color.BLACK)
+
+        # # Create King & Queen.
+        # chess_pieces[4][Board.HEIGHT-1] = King(4, Board.HEIGHT-1, Color.WHITE)
+        # chess_pieces[3][Board.HEIGHT-1] = Queen(3, Board.HEIGHT-1, Color.WHITE)
+        # chess_pieces[4][0] = King(4, 0, Color.BLACK)
+        # chess_pieces[3][0] = Queen(3, 0, Color.BLACK)
+    
+    # generates a 1d chess board
+    # TODO: implement
+    # TODO: does this go horizontally or vertically?
+    # vertical --> a1, a2, ... , a8, b1, ... , h8
+    # horizontal --> a1, b1, ... , h1, a2, ... , h8
+    # what makes more sense?
+    @staticmethod
+    def d1():
+        raise NotImplementedError
+    
+        # 1D piece representation
+        self.flat_chesspieces = [0 for _ in range(Board.WIDTH * Board.HEIGHT)]
+    
+        # # Create pawns.
+        # for x in range(Board.WIDTH):
+        #     chess_pieces[x][Board.HEIGHT-2] = Pawn(x, Board.HEIGHT-2, Color.WHITE)
+        #     chess_pieces[x][1] = Pawn(x, 1, Color.BLACK)
+
+        # # Create rooks.
+        # chess_pieces[0][Board.HEIGHT-1] = Rook(0, Board.HEIGHT-1, Color.WHITE)
+        # chess_pieces[Board.WIDTH-1][Board.HEIGHT-1] = Rook(Board.WIDTH-1, Board.HEIGHT-1, Color.WHITE)
+        # chess_pieces[0][0] = Rook(0, 0, Color.BLACK)
+        # chess_pieces[Board.WIDTH-1][0] = Rook(Board.WIDTH-1, 0, Color.BLACK)
+
+        # # Create Knights.
+        # chess_pieces[1][Board.HEIGHT-1] = Knight(1, Board.HEIGHT-1, Color.WHITE)
+        # chess_pieces[Board.WIDTH-2][Board.HEIGHT-1] = Knight(Board.WIDTH-2, Board.HEIGHT-1, Color.WHITE)
+        # chess_pieces[1][0] = Knight(1, 0, Color.BLACK)
+        # chess_pieces[Board.WIDTH-2][0] = Knight(Board.WIDTH-2, 0, Color.BLACK)
+
+        # # Create Bishops.
+        # chess_pieces[2][Board.HEIGHT-1] = Bishop(2, Board.HEIGHT-1, Color.WHITE)
+        # chess_pieces[Board.WIDTH-3][Board.HEIGHT-1] = Bishop(Board.WIDTH-3, Board.HEIGHT-1, Color.WHITE)
+        # chess_pieces[2][0] = Bishop(2, 0, Color.BLACK)
+        # chess_pieces[Board.WIDTH-3][0] = Bishop(Board.WIDTH-3, 0, Color.BLACK)
+
+        # # Create King & Queen.
+        # chess_pieces[4][Board.HEIGHT-1] = King(4, Board.HEIGHT-1, Color.WHITE)
+        # chess_pieces[3][Board.HEIGHT-1] = Queen(3, Board.HEIGHT-1, Color.WHITE)
+        # chess_pieces[4][0] = King(4, 0, Color.BLACK)
+        # chess_pieces[3][0] = Queen(3, 0, Color.BLACK)
     
     # reset the en passant flags
     def reset_en_passant_flags(self):
@@ -77,9 +187,11 @@ class Board:
                     piece.just_moved_two = False
 
     # save the current board state
+    # this appends full clones of the board
+    # TODO: only needs to save the piece positions
     def save_board_state(self):
         if not self.is_clone:
-            self.board_state_record.append(self.clone(self))
+            self.board_states.append(self.clone(self))
 
     # lists all possible moves for a given color on the board
     # TODO: remove this function

@@ -66,3 +66,23 @@ class User(Agent):
             return 7
 
         raise ValueError("Invalid letter.")
+    
+    def xpos_to_letter(self, xpos):
+        if xpos == 0:
+            return 'A'
+        if xpos == 1:
+            return 'B'
+        if xpos == 2:
+            return 'C'
+        if xpos == 3:
+            return 'D'
+        if xpos == 4:
+            return 'E'
+        if xpos == 5:
+            return 'F'
+        if xpos == 6:
+            return 'G'
+        if xpos == 7:
+            return 'H'
+
+        raise ValueError("Invalid xpos.")
