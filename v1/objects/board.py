@@ -53,131 +53,118 @@ class Board:
             raise ValueError("Invalid board type.")
 
     
-    # generates a 2d chess board
+    # generates a 2d piece board
     @staticmethod
     def d2():
         # 2D piece representation
-        chess_pieces = [[0 for _ in range(Board.WIDTH)] for _ in range(Board.HEIGHT)]
+        pieces = [[0 for _ in range(Board.WIDTH)] for _ in range(Board.HEIGHT)]
         
         # Create pawns.
         for x in range(Board.WIDTH):
-            chess_pieces[x][Board.HEIGHT-2] = Pawn(x, Board.HEIGHT-2, Color.WHITE)
-            chess_pieces[x][1] = Pawn(x, 1, Color.BLACK)
+            pieces[x][Board.HEIGHT-2] = Pawn(x, Board.HEIGHT-2, Color.WHITE)
+            pieces[x][1] = Pawn(x, 1, Color.BLACK)
 
         # Create rooks.
-        chess_pieces[0][Board.HEIGHT-1] = Rook(0, Board.HEIGHT-1, Color.WHITE)
-        chess_pieces[Board.WIDTH-1][Board.HEIGHT-1] = Rook(Board.WIDTH-1, Board.HEIGHT-1, Color.WHITE)
-        chess_pieces[0][0] = Rook(0, 0, Color.BLACK)
-        chess_pieces[Board.WIDTH-1][0] = Rook(Board.WIDTH-1, 0, Color.BLACK)
+        pieces[0][Board.HEIGHT-1] = Rook(0, Board.HEIGHT-1, Color.WHITE)
+        pieces[Board.WIDTH-1][Board.HEIGHT-1] = Rook(Board.WIDTH-1, Board.HEIGHT-1, Color.WHITE)
+        pieces[0][0] = Rook(0, 0, Color.BLACK)
+        pieces[Board.WIDTH-1][0] = Rook(Board.WIDTH-1, 0, Color.BLACK)
 
         # Create Knights.
-        chess_pieces[1][Board.HEIGHT-1] = Knight(1, Board.HEIGHT-1, Color.WHITE)
-        chess_pieces[Board.WIDTH-2][Board.HEIGHT-1] = Knight(Board.WIDTH-2, Board.HEIGHT-1, Color.WHITE)
-        chess_pieces[1][0] = Knight(1, 0, Color.BLACK)
-        chess_pieces[Board.WIDTH-2][0] = Knight(Board.WIDTH-2, 0, Color.BLACK)
+        pieces[1][Board.HEIGHT-1] = Knight(1, Board.HEIGHT-1, Color.WHITE)
+        pieces[Board.WIDTH-2][Board.HEIGHT-1] = Knight(Board.WIDTH-2, Board.HEIGHT-1, Color.WHITE)
+        pieces[1][0] = Knight(1, 0, Color.BLACK)
+        pieces[Board.WIDTH-2][0] = Knight(Board.WIDTH-2, 0, Color.BLACK)
 
         # Create Bishops.
-        chess_pieces[2][Board.HEIGHT-1] = Bishop(2, Board.HEIGHT-1, Color.WHITE)
-        chess_pieces[Board.WIDTH-3][Board.HEIGHT-1] = Bishop(Board.WIDTH-3, Board.HEIGHT-1, Color.WHITE)
-        chess_pieces[2][0] = Bishop(2, 0, Color.BLACK)
-        chess_pieces[Board.WIDTH-3][0] = Bishop(Board.WIDTH-3, 0, Color.BLACK)
+        pieces[2][Board.HEIGHT-1] = Bishop(2, Board.HEIGHT-1, Color.WHITE)
+        pieces[Board.WIDTH-3][Board.HEIGHT-1] = Bishop(Board.WIDTH-3, Board.HEIGHT-1, Color.WHITE)
+        pieces[2][0] = Bishop(2, 0, Color.BLACK)
+        pieces[Board.WIDTH-3][0] = Bishop(Board.WIDTH-3, 0, Color.BLACK)
 
         # Create King & Queen.
-        chess_pieces[4][Board.HEIGHT-1] = King(4, Board.HEIGHT-1, Color.WHITE)
-        chess_pieces[3][Board.HEIGHT-1] = Queen(3, Board.HEIGHT-1, Color.WHITE)
-        chess_pieces[4][0] = King(4, 0, Color.BLACK)
-        chess_pieces[3][0] = Queen(3, 0, Color.BLACK)
+        pieces[4][Board.HEIGHT-1] = King(4, Board.HEIGHT-1, Color.WHITE)
+        pieces[3][Board.HEIGHT-1] = Queen(3, Board.HEIGHT-1, Color.WHITE)
+        pieces[4][0] = King(4, 0, Color.BLACK)
+        pieces[3][0] = Queen(3, 0, Color.BLACK)
 
-        return chess_pieces
+        return pieces
     
-    # generates a hash table chess board
-    # TODO: implement
+    # generates a 2d hash table piece board
     @staticmethod
     def hash():
-        raise NotImplementedError
-    
+        letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
+        
         # hash table representation w/ ordered lists
-        self.hash_chesspieces = {
-            'a': [0 for _ in range(8)],
-            'b': [0 for _ in range(8)],
-            'c': [0 for _ in range(8)],
-            'd': [0 for _ in range(8)],
-            'e': [0 for _ in range(8)],
-            'f': [0 for _ in range(8)],
-            'g': [0 for _ in range(8)],
-            'h': [0 for _ in range(8)]
-        }
+        pieces = {leter: [0 for _ in range(8)] for leter in letters}
 
-        # # Create pawns.
-        # for x in range(Board.WIDTH):
-        #     chess_pieces[x][Board.HEIGHT-2] = Pawn(x, Board.HEIGHT-2, Color.WHITE)
-        #     chess_pieces[x][1] = Pawn(x, 1, Color.BLACK)
+        # Create pawns.        
+        for i, letter in enumerate(letters):
+            pieces[letter][Board.HEIGHT-2] = Pawn(i, Board.HEIGHT-2, Color.WHITE)
+            pieces[letter][1] = Pawn(i, 1, Color.BLACK)
 
-        # # Create rooks.
-        # chess_pieces[0][Board.HEIGHT-1] = Rook(0, Board.HEIGHT-1, Color.WHITE)
-        # chess_pieces[Board.WIDTH-1][Board.HEIGHT-1] = Rook(Board.WIDTH-1, Board.HEIGHT-1, Color.WHITE)
-        # chess_pieces[0][0] = Rook(0, 0, Color.BLACK)
-        # chess_pieces[Board.WIDTH-1][0] = Rook(Board.WIDTH-1, 0, Color.BLACK)
+        # Create rooks.
+        # a0, h0, a7, h7
+        pieces['a'][0] = Rook(0, 0, Color.WHITE)
+        pieces['h'][0] = Rook(7, 0, Color.WHITE)
+        pieces['a'][7] = Rook(0, 7, Color.BLACK)
+        pieces['h'][7] = Rook(7, 7, Color.BLACK)
 
-        # # Create Knights.
-        # chess_pieces[1][Board.HEIGHT-1] = Knight(1, Board.HEIGHT-1, Color.WHITE)
-        # chess_pieces[Board.WIDTH-2][Board.HEIGHT-1] = Knight(Board.WIDTH-2, Board.HEIGHT-1, Color.WHITE)
-        # chess_pieces[1][0] = Knight(1, 0, Color.BLACK)
-        # chess_pieces[Board.WIDTH-2][0] = Knight(Board.WIDTH-2, 0, Color.BLACK)
+        # Create Knights.
+        # b0, g0, b7, g7
+        pieces['b'][0] = Knight(1, 0, Color.WHITE)
+        pieces['g'][0] = Knight(6, 0, Color.WHITE)
+        pieces['b'][7] = Knight(1, 7, Color.BLACK)
+        pieces['g'][7] = Knight(6, 7, Color.BLACK)
 
-        # # Create Bishops.
-        # chess_pieces[2][Board.HEIGHT-1] = Bishop(2, Board.HEIGHT-1, Color.WHITE)
-        # chess_pieces[Board.WIDTH-3][Board.HEIGHT-1] = Bishop(Board.WIDTH-3, Board.HEIGHT-1, Color.WHITE)
-        # chess_pieces[2][0] = Bishop(2, 0, Color.BLACK)
-        # chess_pieces[Board.WIDTH-3][0] = Bishop(Board.WIDTH-3, 0, Color.BLACK)
+        # Create Bishops.
+        # c0, f0, c7, f7
+        pieces['c'][0] = Bishop(2, 0, Color.WHITE)
+        pieces['f'][0] = Bishop(5, 0, Color.WHITE)
+        pieces['c'][7] = Bishop(2, 7, Color.BLACK)
+        pieces['f'][7] = Bishop(5, 7, Color.BLACK)
 
-        # # Create King & Queen.
-        # chess_pieces[4][Board.HEIGHT-1] = King(4, Board.HEIGHT-1, Color.WHITE)
-        # chess_pieces[3][Board.HEIGHT-1] = Queen(3, Board.HEIGHT-1, Color.WHITE)
-        # chess_pieces[4][0] = King(4, 0, Color.BLACK)
-        # chess_pieces[3][0] = Queen(3, 0, Color.BLACK)
+        # Create King & Queen.
+        # d0, e0, d7, e7
+        pieces['d'][0] = Queen(3, 0, Color.WHITE)
+        pieces['e'][0] = King(4, 0, Color.WHITE)
+        pieces['d'][7] = Queen(3, 7, Color.BLACK)
+        pieces['e'][7] = King(4, 7, Color.BLACK)
+
+        return pieces
     
-    # generates a 1d chess board
-    # TODO: implement
-    # TODO: does this go horizontally or vertically?
-    # vertical --> a1, a2, ... , a8, b1, ... , h8
-    # horizontal --> a1, b1, ... , h1, a2, ... , h8
-    # what makes more sense?
+    # generates a 1d bit board board
+    # pieces are horizontally aligned
     @staticmethod
     def d1():
-        raise NotImplementedError
-    
         # 1D piece representation
-        self.flat_chesspieces = [0 for _ in range(Board.WIDTH * Board.HEIGHT)]
-    
-        # # Create pawns.
-        # for x in range(Board.WIDTH):
-        #     chess_pieces[x][Board.HEIGHT-2] = Pawn(x, Board.HEIGHT-2, Color.WHITE)
-        #     chess_pieces[x][1] = Pawn(x, 1, Color.BLACK)
-
-        # # Create rooks.
-        # chess_pieces[0][Board.HEIGHT-1] = Rook(0, Board.HEIGHT-1, Color.WHITE)
-        # chess_pieces[Board.WIDTH-1][Board.HEIGHT-1] = Rook(Board.WIDTH-1, Board.HEIGHT-1, Color.WHITE)
-        # chess_pieces[0][0] = Rook(0, 0, Color.BLACK)
-        # chess_pieces[Board.WIDTH-1][0] = Rook(Board.WIDTH-1, 0, Color.BLACK)
-
-        # # Create Knights.
-        # chess_pieces[1][Board.HEIGHT-1] = Knight(1, Board.HEIGHT-1, Color.WHITE)
-        # chess_pieces[Board.WIDTH-2][Board.HEIGHT-1] = Knight(Board.WIDTH-2, Board.HEIGHT-1, Color.WHITE)
-        # chess_pieces[1][0] = Knight(1, 0, Color.BLACK)
-        # chess_pieces[Board.WIDTH-2][0] = Knight(Board.WIDTH-2, 0, Color.BLACK)
-
-        # # Create Bishops.
-        # chess_pieces[2][Board.HEIGHT-1] = Bishop(2, Board.HEIGHT-1, Color.WHITE)
-        # chess_pieces[Board.WIDTH-3][Board.HEIGHT-1] = Bishop(Board.WIDTH-3, Board.HEIGHT-1, Color.WHITE)
-        # chess_pieces[2][0] = Bishop(2, 0, Color.BLACK)
-        # chess_pieces[Board.WIDTH-3][0] = Bishop(Board.WIDTH-3, 0, Color.BLACK)
-
-        # # Create King & Queen.
-        # chess_pieces[4][Board.HEIGHT-1] = King(4, Board.HEIGHT-1, Color.WHITE)
-        # chess_pieces[3][Board.HEIGHT-1] = Queen(3, Board.HEIGHT-1, Color.WHITE)
-        # chess_pieces[4][0] = King(4, 0, Color.BLACK)
-        # chess_pieces[3][0] = Queen(3, 0, Color.BLACK)
+        # LSB = a1, MSB = h8
+        return {
+            'p': {
+                'w': '0b0000000011111111000000000000000000000000000000000000000000000000',
+                'b': '0b0000000000000000000000000000000000000000000000001111111100000000',
+            },
+            'r': {
+                'w': '0b1000000100000000000000000000000000000000000000000000000000000000',
+                'b': '0b0000000000000000000000000000000000000000000000000000000100000001',
+            },
+            'n': {
+                'w': '0b0100001000000000000000000000000000000000000000000000000000000000',
+                'b': '0b0000000000000000000000000000000000000000000000000000000001000010',
+            },
+            'b': {
+                'w': '0b0010010000000000000000000000000000000000000000000000000000000000',
+                'b': '0b0000000000000000000000000000000000000000000000000000000000100100',
+            },
+            'k': {
+                'w': '0b0000100000000000000000000000000000000000000000000000000000000000',
+                'b': '0b0000000000000000000000000000000000000000000000000000000000001000',
+            },
+            'q': {
+                'w': '0b0001000000000000000000000000000000000000000000000000000000000000',
+                'b': '0b0000000000000000000000000000000000000000000000000000000000010000',
+            },
+        }
     
     # reset the en passant flags
     def reset_en_passant_flags(self):
