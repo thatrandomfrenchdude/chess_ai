@@ -3,13 +3,23 @@ from objects.color import Color
 from entities.user import User
 from entities.ai import Ai
 
-# TODO: add AI vs AI --> need to clean up AI implementation
-# TODO: convert board represenation to 1D array
-# TODO: implement piece lookup table by reference
+# Outstanding work, grouped by similarity
+
+# TODO: add testing framework to test all possible moves
+# TODO: add testing to ensure 
+
+# TODO: implement move cache --> when calculating valid moves of a piece from a spot, save these for later use
 # TODO: implement lazy evaluation of possible moves + caching to db by state --> valid moves of piece p in position x,y and all other board positions
+
+# BUG: resolve AI v AI gets stuck in repeating moves
+# TODO: refactor/optimize move generation:
+    # 1. apply move rules for piece to gen list possible moves.
+    # 2. overlay on board to check bounds + blocked.
+    # 3. return true/false
+
 # TODO: minimize memory usage by eliminating cloning --> bitboard?
-# TODO: optimize move generation
 # TODO: implement static evaluation function based on board state
+
 # TODO: add ui and api
 
 # BUG: unable to take queen with my queen, invalid move
