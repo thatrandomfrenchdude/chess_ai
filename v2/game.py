@@ -2,6 +2,7 @@ from objects.board import Board
 from objects.color import Color
 from entities.user import User
 from entities.ai import Ai
+from rules import Rules
 
 # Outstanding work, grouped by similarity
 
@@ -30,8 +31,11 @@ class Chess():
     def __init__(self) -> None:
         # generate a new board (we always need one)
         flip = False  # always default to false
-        self.board = Board.new(flip)
-        self.move_history = []
+        self.board = Board.new()
+        self.board_state_record = []
+        self.board_string_record = []  # for special condition checks
+        self.moves = []
+        self.move_count = 0
 
         # choose run mode
         mode = self.choose_mode()
@@ -45,7 +49,7 @@ class Chess():
             else:
                 self.white_agent = Ai(Color.WHITE, self.board)
                 self.black_agent = User(Color.BLACK, self.board)
-                self.flip = True
+                self.board.flip = True
         elif mode == 'AvA':
             self.white_agent = Ai(Color.WHITE, self.board)
             self.black_agent = Ai(Color.BLACK, self.board)
@@ -63,14 +67,21 @@ class Chess():
         while not user_color in ['0', '1']:
             user_color = input("Choose a color, 0 for white, 1 for black: ")
         return False if user_color == '0' else True
+    
+    def save_board_state(self) -> None:
+        self.board_state_record.append(self.board.chesspieces)
+        self.board_string_record.append(self.encode_boardstring(self.board.chesspieces))
 
     def loop(self) -> None:
         try:
+            # save the board state
+            self.save_board_state()
+
             # print board to console
             print(self.board.to_string())
 
             while True:
-                # get the white move
+                # get the white move, invalid moves excluded
                 white_move = self.white_agent.move()
                 print(white_move.to_string())
                 if (white_move == 0):
@@ -84,6 +95,7 @@ class Chess():
                 # perform the move 
                 self.board.perform_move(white_move)
                 print(self.board.to_string())
+                self.move_count += 1
 
                 # black move
                 black_move = self.black_agent.move()
@@ -99,18 +111,45 @@ class Chess():
                 # perform the move
                 self.board.perform_move(black_move)
                 print(self.board.to_string())
+                self.move_count += 1
+
+                # check special conditions
+                # if (Rules.is_fivefold_repetition(self.board)):
+                #     print("Fivefold repetition. Draw.")
+                #     break
+
+                if (Rules.is_seventyfive_moves(self.move_count)):
+                    print("Seventyfive moves. Draw.")
+                    break
+
+                if (Rules.is_insufficient_material()):
+                    print("Insufficient material. Draw.")
+                    break
+
         except:
             print("Game Over")
-            self.print_game_record()
         
     def print_game_record(self) -> None:
         for state in self.board.board_state_record:
-            # print(state.to_string())
             print(state)
+
+    # converts the board to a string representation
+    @ staticmethod
+    def encode_boardstring(pieces):
+        encoding = ""
+        for y in range(Board.HEIGHT):
+            for x in range(Board.WIDTH):
+                piece = pieces[x][y]
+                if piece:
+                    encoding += piece.piece_type + str(piece.color)
+                else:
+                    encoding += ".. "
+        return encoding
 
 def app() -> None:
     game = Chess()
     game.loop()
+    game.print_game_record()
 
 if __name__ == '__main__':
     app()

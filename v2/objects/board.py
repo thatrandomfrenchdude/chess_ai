@@ -15,22 +15,14 @@ class Board:
 
 
     # TODO: add board type as input so use has option to select representation
-    def __init__(self, chesspieces, white_king_moved, black_king_moved, flip, is_clone=False):
+    def __init__(self, chesspieces, white_king_moved, black_king_moved, is_clone=False):
         self.chesspieces = chesspieces
         self.white_king_moved = white_king_moved
         self.black_king_moved = black_king_moved
-        self.flip = flip
         self.is_clone = is_clone
 
-        # states will be saved at the beginning of each turn
-        # states will be encoded as strings
-        # self.board_states = [] if not self.is_clone else None
-
-        # # save the starting board state
-        # if not is_clone:
-        #     self.board_states = [self.clone(self)]
-
     @classmethod
+    # TODO: rewrite for hash representation
     def clone(cls, chessboard):
         chesspieces = [[0 for x in range(Board.WIDTH)] for y in range(Board.HEIGHT)]
         for x in range(Board.WIDTH):
@@ -38,61 +30,12 @@ class Board:
                 piece = chessboard.chesspieces[x][y]
                 if (piece != 0):
                     chesspieces[x][y] = piece.clone()
-        return cls(chesspieces, chessboard.white_king_moved, chessboard.black_king_moved, False, is_clone=True)
+        return cls(chesspieces, chessboard.white_king_moved, chessboard.black_king_moved, is_clone=True)
 
     # creates a new chess board
     @classmethod
     def new(cls, flip=False):
-        return cls(cls.generate_board(), False, False, flip)
-    
-    # creates a new chess board of type t, where t is in ['2d', 'hash', '1d']
-    def generate_board(self, t="2d"):
-        if t == "2d":
-            return self.d2()
-        elif t == "hash":
-            return self.hash()
-        elif t == "1d":
-            self.d1()
-        else:
-            raise ValueError("Invalid board type.")
-
-    
-    # generates a 2d piece board
-    @staticmethod
-    def d2():
-        # 2D piece representation
-        pieces = [[0 for _ in range(Board.WIDTH)] for _ in range(Board.HEIGHT)]
-        
-        # Create pawns.
-        for x in range(Board.WIDTH):
-            pieces[x][Board.HEIGHT-2] = Pawn(x, Board.HEIGHT-2, Color.WHITE)
-            pieces[x][1] = Pawn(x, 1, Color.BLACK)
-
-        # Create rooks.
-        pieces[0][Board.HEIGHT-1] = Rook(0, Board.HEIGHT-1, Color.WHITE)
-        pieces[Board.WIDTH-1][Board.HEIGHT-1] = Rook(Board.WIDTH-1, Board.HEIGHT-1, Color.WHITE)
-        pieces[0][0] = Rook(0, 0, Color.BLACK)
-        pieces[Board.WIDTH-1][0] = Rook(Board.WIDTH-1, 0, Color.BLACK)
-
-        # Create Knights.
-        pieces[1][Board.HEIGHT-1] = Knight(1, Board.HEIGHT-1, Color.WHITE)
-        pieces[Board.WIDTH-2][Board.HEIGHT-1] = Knight(Board.WIDTH-2, Board.HEIGHT-1, Color.WHITE)
-        pieces[1][0] = Knight(1, 0, Color.BLACK)
-        pieces[Board.WIDTH-2][0] = Knight(Board.WIDTH-2, 0, Color.BLACK)
-
-        # Create Bishops.
-        pieces[2][Board.HEIGHT-1] = Bishop(2, Board.HEIGHT-1, Color.WHITE)
-        pieces[Board.WIDTH-3][Board.HEIGHT-1] = Bishop(Board.WIDTH-3, Board.HEIGHT-1, Color.WHITE)
-        pieces[2][0] = Bishop(2, 0, Color.BLACK)
-        pieces[Board.WIDTH-3][0] = Bishop(Board.WIDTH-3, 0, Color.BLACK)
-
-        # Create King & Queen.
-        pieces[4][Board.HEIGHT-1] = King(4, Board.HEIGHT-1, Color.WHITE)
-        pieces[3][Board.HEIGHT-1] = Queen(3, Board.HEIGHT-1, Color.WHITE)
-        pieces[4][0] = King(4, 0, Color.BLACK)
-        pieces[3][0] = Queen(3, 0, Color.BLACK)
-
-        return pieces
+        return cls(cls.hash(), False, False)
     
     # generates a 2d hash table piece board
     @staticmethod
@@ -137,52 +80,12 @@ class Board:
 
         return pieces
     
-    # generates a 1d bit board board
-    # pieces are horizontally aligned
-    @staticmethod
-    def d1():
-        # 1D piece representation
-        # LSB = a1, MSB = h8
-        return {
-            'p': {
-                'w': '0b0000000011111111000000000000000000000000000000000000000000000000',
-                'b': '0b0000000000000000000000000000000000000000000000001111111100000000',
-            },
-            'r': {
-                'w': '0b1000000100000000000000000000000000000000000000000000000000000000',
-                'b': '0b0000000000000000000000000000000000000000000000000000000100000001',
-            },
-            'n': {
-                'w': '0b0100001000000000000000000000000000000000000000000000000000000000',
-                'b': '0b0000000000000000000000000000000000000000000000000000000001000010',
-            },
-            'b': {
-                'w': '0b0010010000000000000000000000000000000000000000000000000000000000',
-                'b': '0b0000000000000000000000000000000000000000000000000000000000100100',
-            },
-            'k': {
-                'w': '0b0000100000000000000000000000000000000000000000000000000000000000',
-                'b': '0b0000000000000000000000000000000000000000000000000000000000001000',
-            },
-            'q': {
-                'w': '0b0001000000000000000000000000000000000000000000000000000000000000',
-                'b': '0b0000000000000000000000000000000000000000000000000000000000010000',
-            },
-        }
-    
     # reset the en passant flags
     def reset_en_passant_flags(self):
         for row in self.chesspieces:
             for piece in row:
                 if piece and piece.PIECE_TYPE == "P":
                     piece.just_moved_two = False
-
-    # save the current board state
-    # this appends full clones of the board
-    # TODO: only needs to save the piece positions
-    def save_board_state(self):
-        if not self.is_clone:
-            self.board_states.append(self.encode_boardstring(self.chesspieces))
 
     # lists all possible moves for a given color on the board
     # TODO: remove this function
@@ -296,11 +199,8 @@ class Board:
         return (x >= 0 and y >= 0 and x < Board.WIDTH and y < Board.HEIGHT)
 
     # converts the board to a string
-    def to_string(self):
-        if self.flip:
-            return self.black_to_string()
-        else:
-            return self.white_to_string()
+    def to_string(self, flip):
+        return self.black_to_string() if flip else self.white_to_string()
         
     # print with white pieces on the bottom
     def white_to_string(self):
@@ -332,41 +232,6 @@ class Board:
                     string += ".. "
             string += "\n"
         return string + "\n"
-    
-    @ staticmethod
-    def encode_boardstring(pieces):
-        """
-        Convert the board state to a string for easier comparison.
-        """
-        encoding = ""
-        for y in range(Board.HEIGHT):
-            for x in range(Board.WIDTH):
-                piece = pieces[x][y]
-                if piece:
-                    encoding += piece.piece_type + str(piece.color)
-                else:
-                    encoding += ".. "
-        return encoding
-    
-    @ staticmethod
-    def decode_boardstring(encoding):
-        """
-        Convert the string representation back to board state.
-        """
-        pieces = [[None for _ in range(Board.HEIGHT)] for _ in range(Board.WIDTH)]
-        idx = 0
-        
-        for y in range(Board.HEIGHT):
-            for x in range(Board.WIDTH):
-                chunk = encoding[idx:idx+2]
-                if chunk == "..":
-                    pieces[x][y] = None
-                else:
-                    piece_type = chunk[0]
-                    color = chunk[1]
-                    pieces[x][y] = Piece(piece_type, color)  # Assuming you have a Piece class that can be initialized with a type and color
-                idx += 2
-        return pieces
 
     # returns true or false if there is insufficient material to checkmate
     def is_insuifficient_material(self):
