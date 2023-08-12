@@ -7,12 +7,9 @@ from objects.pieces.rook import Rook
 from objects.color import Color  # int, 0:1::white:black
 from objects.pieces.piece import Piece
 
-# TODO: add stalemate check on repeats
-
 class Board:
     WIDTH = 8
     HEIGHT = 8
-
 
     # TODO: add board type as input so use has option to select representation
     def __init__(self, chesspieces, white_king_moved, black_king_moved, is_clone=False):
@@ -88,7 +85,8 @@ class Board:
                     piece.just_moved_two = False
 
     # lists all possible moves for a given color on the board
-    # TODO: remove this function
+    # TODO: remove this function --> ?
+    # TODO: rewrite for hash representation
     def get_possible_moves(self, color):
         moves = []
         for x in range(Board.WIDTH):
@@ -101,6 +99,7 @@ class Board:
     
     # TODO: confirm implementation
     # TODO: implementation for black?
+    # TODO: rewrite for hash representation
     def check_en_passant(self, piece, move):
         # delete the pawn that just got passed
         if piece.color == Color.WHITE and \
@@ -112,6 +111,7 @@ class Board:
         else:
             pass
 
+    # TODO: rewrite for hash representation
     def perform_move(self, move):
         # save the board state for record
         self.save_board_state()
@@ -157,6 +157,7 @@ class Board:
 
     
     # updates the state of a piece on the board
+    # TODO: rewrite for hash representation
     def move_piece(self, piece, xto, yto):
         if piece != 0:  # added this
             if piece.PIECE_TYPE and abs(yto - piece.y) == 2:
@@ -169,6 +170,7 @@ class Board:
 
 
     # TODO: rewrite this function
+    # TODO: rewrite for hash representation
     def is_check(self, color):
         other_color = Color.WHITE if color == Color.BLACK else Color.BLACK
 
@@ -189,12 +191,14 @@ class Board:
         return False
 
     # Returns piece at given position or 0 if: No piece or out of bounds.
+    # TODO: rewrite for hash representation
     def get_piece(self, x, y):
         if (not self.in_bounds(x, y)):
             return 0
         return self.chesspieces[x][y]
 
     # checks that the given coordinates are within the board spaces
+    # TODO: rewrite for hash representation
     def in_bounds(self, x, y):
         return (x >= 0 and y >= 0 and x < Board.WIDTH and y < Board.HEIGHT)
 
@@ -203,6 +207,7 @@ class Board:
         return self.black_to_string() if flip else self.white_to_string()
         
     # print with white pieces on the bottom
+    # TODO: rewrite for hash representation
     def white_to_string(self):
         string =  "    A  B  C  D  E  F  G  H\n"
         string += "    -----------------------\n"
@@ -219,6 +224,7 @@ class Board:
 
     
     # print with black pieces on the bottom
+    # TODO: rewrite for hash representation
     def black_to_string(self):
         string =  "    H  G  F  E  D  C  B  A\n"
         string += "    -----------------------\n"
