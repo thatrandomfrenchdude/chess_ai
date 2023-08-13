@@ -1,5 +1,6 @@
 from entities.agent import Agent
 from objects.move import Move
+from objects.move_cache import raw_moves_from_position
 
 class User(Agent):
     # Returns a move object based on the users input.
@@ -10,11 +11,11 @@ class User(Agent):
         move_str = move_str.replace(" ", "")
 
         try:
-            xfrom = self.letter_to_xpos(move_str[0:1])
-            yfrom = 8 - int(move_str[1:2]) # The board is drawn "upside down", so flip the y coordinate.
-            xto = self.letter_to_xpos(move_str[2:3])
-            yto = 8 - int(move_str[3:4]) # The board is drawn "upside down", so flip the y coordinate.
-            return Move(xfrom, yfrom, xto, yto)
+            letter_from = move_str[0:1].lower()
+            num_from = move_str[1:2].lower()
+            letter_to = move_str[2:3].lower()
+            num_to = move_str[3:4].lower()
+            return Move(letter_from, num_from, letter_to, num_to)
         except ValueError:
             print("Invalid format. Example: A2 A4")
             return self.get_user_move()

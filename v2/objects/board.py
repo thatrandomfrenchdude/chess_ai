@@ -19,15 +19,13 @@ class Board:
         self.is_clone = is_clone
 
     @classmethod
-    # TODO: rewrite for hash representation
-    def clone(cls, chessboard):
-        chesspieces = [[0 for x in range(Board.WIDTH)] for y in range(Board.HEIGHT)]
-        for x in range(Board.WIDTH):
-            for y in range(Board.HEIGHT):
-                piece = chessboard.chesspieces[x][y]
+    def clone(cls, b):
+        new_pieces = {letter: [0 for _ in range(8)] for letter in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']}
+        for key, pieces in b.chesspieces.items():
+            for i, piece in enumerate(pieces):
                 if (piece != 0):
-                    chesspieces[x][y] = piece.clone()
-        return cls(chesspieces, chessboard.white_king_moved, chessboard.black_king_moved, is_clone=True)
+                    new_pieces[key][i] = piece.clone()
+        return cls(new_pieces, b.white_king_moved, b.black_king_moved, is_clone=True)
 
     # creates a new chess board
     @classmethod
@@ -37,13 +35,11 @@ class Board:
     # generates a 2d hash table piece board
     @staticmethod
     def hash():
-        letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
-        
         # hash table representation w/ ordered lists
-        pieces = {leter: [0 for _ in range(8)] for leter in letters}
+        pieces = {letter: [0 for _ in range(8)] for letter in ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']}
 
         # Create pawns.        
-        for i, letter in enumerate(letters):
+        for i, letter in enumerate(['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']):
             pieces[letter][Board.HEIGHT-2] = Pawn(i, Board.HEIGHT-2, Color.WHITE)
             pieces[letter][1] = Pawn(i, 1, Color.BLACK)
 
@@ -79,21 +75,17 @@ class Board:
     
     # reset the en passant flags
     def reset_en_passant_flags(self):
-        for row in self.chesspieces:
-            for piece in row:
+        for _, pieces in self.chesspieces.items():
+            for piece in pieces:
                 if piece and piece.PIECE_TYPE == "P":
                     piece.just_moved_two = False
 
-    # lists all possible moves for a given color on the board
-    # TODO: remove this function --> ?
-    # TODO: rewrite for hash representation
+    # lists all possible moves for a given color on the board --> ai
     def get_possible_moves(self, color):
         moves = []
-        for x in range(Board.WIDTH):
-            for y in range(Board.HEIGHT):
-                piece = self.chesspieces[x][y]
-                if piece != 0:
-                    if piece.color == color:
+        for _, pieces in self.chesspieces.items():
+            for piece in pieces:
+                if piece != 0 and piece.color == color:
                         moves += piece.get_possible_moves(self)
         return moves
     
@@ -117,6 +109,7 @@ class Board:
         self.save_board_state()
 
         # reset en passant flags --> we have a record saved
+        # record is saved to game, not board
         self.reset_en_passant_flags()
 
         # get the piece
