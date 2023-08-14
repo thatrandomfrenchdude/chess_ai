@@ -14,7 +14,7 @@ class Board:
     letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h']
 
     def __init__(self) -> None:
-        self.white_pieces = {
+        self.white_positions = {
             'p': ['a2', 'b2', 'c2', 'd2', 'e2', 'f2', 'g2', 'h2'],
             'r': ['a1', 'h1'],
             'n': ['b1', 'g1'],
@@ -22,13 +22,23 @@ class Board:
             'q': ['d1'],
             'k': ['e1']
         }
-        self.black_pieces = {
+        self.black_positions = {
             'p': ['a7', 'b7', 'c7', 'd7', 'e7', 'f7', 'g7', 'h7'],
             'r': ['a8', 'h8'],
             'n': ['b8', 'g8'],
             'b': ['c8', 'f8'],
             'q': ['d8'],
             'k': ['e8']
+        }
+        self.pieces = {
+            'a': [Rook('a1', Color.WHITE), Pawn('a2', Color.WHITE), 0, 0, 0, 0, Pawn('a7', Color.BLACK), Rook('a8', Color.BLACK)],
+            'b': [Knight('b1', Color.WHITE), Pawn('b2', Color.WHITE), 0, 0, 0, 0, Pawn('b7', Color.BLACK), Knight('b8', Color.BLACK)],
+            'c': [Bishop('c1', Color.WHITE), Pawn('c2', Color.WHITE), 0, 0, 0, 0, Pawn('c7', Color.BLACK), Bishop('c8', Color.BLACK)],
+            'd': [Queen('d1', Color.WHITE), Pawn('d2', Color.WHITE), 0, 0, 0, 0, Pawn('d7', Color.BLACK), Queen('d8', Color.BLACK)],
+            'e': [King('e1', Color.WHITE), Pawn('e2', Color.WHITE), 0, 0, 0, 0, Pawn('e7', Color.BLACK), King('e8', Color.BLACK)],
+            'f': [Bishop('f1', Color.WHITE), Pawn('f2', Color.WHITE), 0, 0, 0, 0, Pawn('f7', Color.BLACK), Bishop('f8', Color.BLACK)],
+            'g': [Knight('g1', Color.WHITE), Pawn('g2', Color.WHITE), 0, 0, 0, 0, Pawn('g7', Color.BLACK), Knight('g8', Color.BLACK)],
+            'h': [Rook('h1', Color.WHITE), Pawn('h2', Color.WHITE), 0, 0, 0, 0, Pawn('h7', Color.BLACK), Rook('h8', Color.BLACK)]
         }
         self.white_king_moved = False
         self.black_king_moved = False
