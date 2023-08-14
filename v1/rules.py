@@ -1,5 +1,3 @@
-from game import Chess
-
 class Rules:
     # returns true if the current position has been repeated five times
     @staticmethod

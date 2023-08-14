@@ -1,1 +1,1 @@
-python v1/chess-game.py
+python v1/game.py

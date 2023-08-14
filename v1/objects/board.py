@@ -46,13 +46,15 @@ class Board:
         return cls(cls.generate_board(), False, False, flip)
     
     # creates a new chess board of type t, where t is in ['2d', 'hash', '1d']
+    @classmethod
     def generate_board(self, t="2d"):
         if t == "2d":
-            return self.d2()
+            print('generating a 2d board...')
+            return Board.d2()
         elif t == "hash":
-            return self.hash()
+            return Board.hash()
         elif t == "1d":
-            self.d1()
+            return Board.d1()
         else:
             raise ValueError("Invalid board type.")
 

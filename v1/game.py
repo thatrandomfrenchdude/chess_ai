@@ -72,66 +72,66 @@ class Chess():
         return False if user_color == '0' else True
 
     def loop(self) -> None:
-        try:
-            # print board to console
-            print(self.board.to_string())
+        # try:
+        # print board to console
+        print(self.board.to_string())
 
-            while True:
-                # get the white move
-                white_move = self.white_agent.move()
-                print(white_move.to_string())
-                if (white_move == 0):
-                    if (self.board.is_check(Color.WHITE)):
-                        print("Checkmate. Black Wins.")
-                        break
-                    else:
-                        print("Stalemate.")
-                        break
-
-                # perform the move 
-                self.board.perform_move(white_move)
-                print(self.board.to_string())
-
-                # black move
-                black_move = self.black_agent.move()
-                print(black_move.to_string())
-                if (black_move == 0):
-                    if (self.board.is_check(Color.BLACK)):
-                        print("Checkmate. White wins.")
-                        break
-                    else:
-                        print("Stalemate.")
-                        break
-
-                # perform the move
-                self.board.perform_move(black_move)
-                print(self.board.to_string())
-
-                # update move count
-                self.move_count += 1
-
-                # check special conditions
-                # if (Rules.is_fivefold_repetition(self.board)):
-                #     print("Fivefold repetition. Draw.")
-                #     break
-
-                if (Rules.is_seventyfive_moves(self.move_count)):
-                    print("Seventyfive moves. Draw.")
+        while True:
+            # get the white move
+            white_move = self.white_agent.move()
+            print(white_move.to_string())
+            if (white_move == 0):
+                if (self.board.is_check(Color.WHITE)):
+                    print("Checkmate. Black Wins.")
+                    break
+                else:
+                    print("Stalemate.")
                     break
 
-                # if (Rules.is_fifty_moves(self.move_count)):
-                #     print("Fifty moves. Draw.")
-                #     break
+            # perform the move 
+            self.board.perform_move(white_move)
+            print(self.board.to_string())
 
-                # if (Rules.is_insufficient_material(self.board)):
-                #     print("Insufficient material. Draw.")
-                #     break
+            # black move
+            black_move = self.black_agent.move()
+            print(black_move.to_string())
+            if (black_move == 0):
+                if (self.board.is_check(Color.BLACK)):
+                    print("Checkmate. White wins.")
+                    break
+                else:
+                    print("Stalemate.")
+                    break
 
-        except:
-            print("Game Over")
+            # perform the move
+            self.board.perform_move(black_move)
+            print(self.board.to_string())
+
+            # update move count
+            self.move_count += 1
+
+            # check special conditions
+            # if (Rules.is_fivefold_repetition(self.board)):
+            #     print("Fivefold repetition. Draw.")
+            #     break
+
+            if (Rules.is_seventyfive_moves(self.move_count)):
+                print("Seventyfive moves. Draw.")
+                break
+
+            # if (Rules.is_fifty_moves(self.move_count)):
+            #     print("Fifty moves. Draw.")
+            #     break
+
+            # if (Rules.is_insufficient_material(self.board)):
+            #     print("Insufficient material. Draw.")
+            #     break
+
+        # except:
+        #     print("Game Over")
         
     def print_game_record(self) -> None:
-        for state in self.board.board_state_record:
+        for state in self.board_state_record:
             print(state)
 
 def app() -> None:
