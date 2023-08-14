@@ -49,7 +49,6 @@ class Board:
     @classmethod
     def generate_board(self, t="2d"):
         if t == "2d":
-            print('generating a 2d board...')
             return Board.d2()
         elif t == "hash":
             return Board.hash()
