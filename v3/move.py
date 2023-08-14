@@ -1,5 +1,3 @@
-from board import Board
-
 class Move:
     def __init__(self, start: str, end: str):
         self.start = start

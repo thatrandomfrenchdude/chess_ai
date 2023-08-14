@@ -72,6 +72,7 @@ class Board:
                             return True
         return False
 
+    # encodes the current state as a 128 char string
     def encode_state(self) -> str:
         state = ''
         for letter in Board.letters:
@@ -83,10 +84,12 @@ class Board:
         return state
 
     @staticmethod
+    # returns a string representation of the board
     def to_string(bottom_color: bool, pieces: dict) -> str:
         return Board.white_bottom(pieces) if not bottom_color else Board.black_bottom(pieces)
 
     @staticmethod
+    # returns a string representation of the board with white on the bottom
     def white_bottom(pieces) -> str:
         string =  "    A  B  C  D  E  F  G  H\n"
         string += "    -----------------------\n"
@@ -101,6 +104,7 @@ class Board:
         return string + "    -----------------------\n"
 
     @staticmethod
+    # returns a string representation of the board with black on the bottom
     def black_bottom(pieces) -> str:
         string =  "    H  G  F  E  D  C  B  A\n"
         string += "    -----------------------\n"

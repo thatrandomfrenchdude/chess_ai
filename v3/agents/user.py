@@ -1,9 +1,10 @@
 from move import Move
 from board import Board
+from color import Color
 from agents.agent import Agent
 
 class User(Agent):
-    def __init__(self, color: str) -> None:
+    def __init__(self, color: Color) -> None:
         super().__init__(color)
 
 
@@ -16,6 +17,7 @@ class User(Agent):
 
         return Move(move[0], int(move[1]), move[2], int(move[3]))
 
+    # raw user input cleansing
     # check move is two letters and two numbers
     def check_valid_move(self, move) -> bool:
         if len(move) != 4:

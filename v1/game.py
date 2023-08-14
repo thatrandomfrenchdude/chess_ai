@@ -69,7 +69,7 @@ class Chess():
         user_color = -1
         while not user_color in ['0', '1']:
             user_color = input("Choose a color, 0 for white, 1 for black: ")
-        return False if user_color == '0' else True
+        return int(user_color)
 
     def loop(self) -> None:
         # try:
