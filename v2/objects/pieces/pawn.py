@@ -1,18 +1,22 @@
 # import ai
 from objects.pieces.piece import Piece
 from objects.color import Color
+from objects.move_cache import PAWN
 
 
 class Pawn(Piece):
     PIECE_TYPE = "P"
     VALUE = 100
 
-    def __init__(self, x, y, color):
-        super(Pawn, self).__init__(x, y, color, Pawn.PIECE_TYPE, Pawn.VALUE)
+    def __init__(self, letter, num, color):
+        super(Pawn, self).__init__(letter, num, color, Pawn.PIECE_TYPE, Pawn.VALUE)
         self.just_moved_two = False
 
+    def get_possible_moves(self):
+        return PAWN[self.letter][self.num-1]
+
     def is_starting_position(self):
-        return self.y == 1 if self.color == Color.BLACK else self.y == 6
+        return self.num == 2 if self.is_white() else self.num == 7
 
     # checks to see if en passant is possible
     # returns a list with a move for each side if possible
@@ -59,26 +63,6 @@ class Pawn(Piece):
                 return True
         return False
 
-
-    def get_possible_moves(self, board):
-        moves = []
-        direction = 1 if self.color == Color.BLACK else -1
-        if board.get_piece(self.x, self.y + direction) == 0:
-            moves.append(self.get_move(board, self.x, self.y + direction))
-
-        if self.is_starting_position() and board.get_piece(self.x, self.y + direction) == 0 and board.get_piece(self.x, self.y + direction * 2) == 0:
-            moves.append(self.get_move(board, self.x, self.y + direction * 2))
-
-        for dx in [-1, 1]:
-            piece = board.get_piece(self.x + dx, self.y + direction)
-            if piece != 0 and piece.color != self.color:
-                moves.append(self.get_move(board, self.x + dx, self.y + direction))
-
-        # append en passant if applicable
-        moves.extend(self.en_passant(board))
-
-        return self.remove_null_from_list(moves)
-
     def clone(self):
-        return Pawn(self.x, self.y, self.color)
+        return Pawn(self.letter, self.num, self.color)
     
