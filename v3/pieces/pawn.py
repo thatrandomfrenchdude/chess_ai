@@ -151,13 +151,24 @@ class Pawn:
         }
     }
 
-    def __init__(self, color, letter, number):
+    def __init__(self, color):
         self.type = 'p'
         self.color = color
-        self.letter = letter
-        self.number = number
         self.moved = False
         self.just_moved_two = False
 
     def get_possible_moves(self):
-        return 
+        return [move for move in self.moves[self.letter][self.number-1] if self.check_move(move)]
+    
+    def check_move(self, move):
+        letter_to = move[0]
+        number_to = move[1]
+
+        # check if move "eats" same color piece
+
+        # check if move is en passant and, if so,  is valid
+
+        return True
+    
+    def to_string(self) -> str:
+        return f'{self.color}{self.type}'
