@@ -46,18 +46,18 @@ class Board:
     
     # checks if a given move is valid on the board
     def is_valid_move(self, move: Move, color: Color) -> bool:
-        start = False
-        end = True
-        if not color:  # white
-            for _, spots in self.white_pieces.items():
-                if move.start in spots
-        else:
-            for _, v in self.black_pieces.items():
-                if move.start not in v:
-                    start = False
-                if move.end not in v:
-                    end = False
-        return True
+        valid_start = False
+        valid_end = True
+        
+        pieces = self.white_positions.items() if not color else self.black_positions.items()
+        
+        for _, spots in pieces:
+            if move.start in spots:
+                valid_start = True
+            if move.end in spots:
+                valid_end = False
+            
+        return (valid_start and valid_end)
 
 
     # return true if color king is in check else false
