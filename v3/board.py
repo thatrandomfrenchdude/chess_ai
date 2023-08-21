@@ -183,7 +183,7 @@ class Board:
             string += str(num+1) + ' | '
             for letter in Board.letters:
                 if p:= pieces[letter][num] != 0:
-                    string += p.to_string()
+                    string += p.upper() + ' '
                 else:
                     string += '.. '
             string += '\n'
@@ -198,7 +198,7 @@ class Board:
             string += str(num+1) + ' | '
             for letter in Board.letters:
                 if p:= pieces[letter][num] != 0:
-                    string += p.to_string()
+                    string += p.upper() + ' '
                 else:
                     string += '.. '
             string += '\n'
