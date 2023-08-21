@@ -81,22 +81,22 @@ class Bishop:
         ]
     }
     
-    def __init__(self, color):
-        self.type = 'b'
-        self.color = color
-        self.moved = False
+    # def __init__(self, color):
+    #     self.type = 'b'
+    #     self.color = color
+    #     self.moved = False
 
-    def get_possible_moves(self):
-        return [move for move in self.moves[self.letter][self.number-1] if self.check_move(move)]
+    # def get_possible_moves(self):
+    #     return [move for move in self.moves[self.letter][self.number-1] if self.check_move(move)]
     
-    def check_move(self, move):
-        letter_to = move[0]
-        number_to = move[1]
+    # def check_move(self, move):
+    #     letter_to = move[0]
+    #     number_to = move[1]
 
-        # check move is not blocked by same color piece
-        # check if move "eats" same color piece
+    #     # check move is not blocked by same color piece
+    #     # check if move "eats" same color piece
 
-        return True
+    #     return True
 
-    def to_string(self) -> str:
-        return f'{self.color}{self.type}'
+    # def to_string(self) -> str:
+    #     return f'{self.color}{self.type}'

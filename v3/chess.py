@@ -7,8 +7,12 @@ from color import Color
 
 class Chess:
     def __init__(self) -> None:
-        self.white, self.black = self.setup()
+        # generate a new board
         self.board = Board()
+
+        # setup the game
+        self.white, self.black = self.setup()
+        
         self.turn = True  # true for white, false for black
         self.moves = []
         self.game_over = False
@@ -37,11 +41,11 @@ class Chess:
         
         if self.mode == 'UvA':
             if not self.choose_colors():
-                self.white = User(Color.WHITE, self.board)
-                self.black = User(Color.BLACK, self.board)
+                self.white = User(Color.white, self.board)
+                self.black = User(Color.black, self.board)
             else:
-                self.white = User(Color.WHITE, self.board)
-                self.black = User(Color.BLACK, self.board)
+                self.white = User(Color.white, self.board)
+                self.black = User(Color.black, self.board)
                 self.flip = True
 
     # one step of the game
