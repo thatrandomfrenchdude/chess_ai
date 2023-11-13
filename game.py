@@ -1,9 +1,8 @@
+import chess
 from stockfish import Stockfish
-from typing import Union
 
 # from config import app_config
-from entities import Entity, AIBot
-from rules import Rules
+from entities import Entity, BestBot
 
 # forsyth edwards notation (fen)
 # https://en.wikipedia.org/wiki/Forsyth–Edwards_Notation
@@ -15,20 +14,24 @@ from rules import Rules
 # 5. halfmove clock. number of halfmoves since last capture or pawn advance
 # 6. fullmove number. starts at 1 and is incremented after black's move
 
+# resources:
+# https://medium.com/@PropelAuth/analyzing-chess-positions-in-python-building-a-chess-analysis-app-part-1-61e6c098f9f3
+# https://stackoverflow.com/questions/71945463/how-can-i-use-stockfish-in-python-so-that-the-evaluation-is-continuously-updated
+
 
 class Game:
     pass
 
 class Chess(Game):
     def __init__(self,
-        start_pos: str = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1',
-        white_agent: Entity() = AIBot(),
-        black_agent: Entity() = AIBot()
+        start_pos: str = chess.STARTING_FEN,
+        white_agent: Entity() = BestBot(),
+        black_agent: Entity() = BestBot()
     ) -> None:
-        ### setup chess engine
+        ### setup chess engine and set to starting position
         self.engine_parameters = {}
-        self.stockfish = Stockfish()
-        self.stockfish.set_fen_position(start_pos)
+        self.engine = Stockfish()
+        self.engine.set_fen_position(start_pos)
 
         ### game information
         self.white = white_agent
@@ -36,7 +39,8 @@ class Chess(Game):
          # list of moves
         self.moves = []
         # list of board strings
-        self.boards = [self.stockfish.get_fen_position()]
+        self.board = chess.Board()
+        self.boards = [self.board.fen()]
         self.halfmoves = 0
         self.fullmoves = 0
 
@@ -49,10 +53,13 @@ class Chess(Game):
         return 'UvA' if mode == '0' else 'AvA'
 
     def loop(self) -> None:
+        # flag to track game state
+        condition = None  # none = normal play
+
         try:
             while True:
                 # show game board
-                print(self.stockfish.get_board_visual())
+                print(self.board)
 
                 # get move and show in console
                 self.get_move()
@@ -63,50 +70,63 @@ class Chess(Game):
                 # get top n best moves at current position
 
                 # perform move and check conditions
-                self.perform_move(move)
+                condition = self.perform_move(move)
                 self.halfmoves += 1
                 if self.halfmoves % 2 == 0: # black just moved
                     self.fullmoves += 1
-        except:
+
+                # check game conditions
+                if condition not in [None, "check"]:
+                    print(f"Game over: {condition}")
+                    break
+                elif condition == "check":
+                    print("Check")
+
+                # update the chess engine
+                self.engine.set_fen_position(self.boards[-1])
+        except Exception as e:
+            print(f"Exception: {e}")
             print("Game Over")
 
+    # gets a move from the appropriate agent and appends to move list
     def get_move(self) -> None:
-        move = None
-        # check move correct
-        # auto checks for white or black based on game state
-        while not self.stockfish.is_move_correct(move):
-            move = input("Enter a move: ")
+        move = self.white.get_move(self.engine) if self.fullmoves % 2 == 0 else self.black.get_move(self.engine)
         self.moves.append(move)
     
-    def perform_move(self, move) -> Union[None, str]:
+    # performs a move in the engine, updates the board list, and checks game conditions
+    def perform_move(self, move) -> str | None:
+        # TODO: update this to use python chess
         # make the move
-        self.stockfish.make_moves_from_current_position([move])
-        self.boards.append(self.stockfish.get_fen_position())
+        self.board.push_san(move)
+        self.boards.append(self.board.fen())
 
         # check game conditions
         condition = self.check_game_conditions()
         return condition
         
-        
-    def check_game_conditions(self) -> Union[None, str]:
-        # check
-        pass
-        # stalemate
-        pass
-        # checkmate
-        pass
-        # insufficient material
-        if Rules.is_insufficient_material():
+    # checks various conditions that can affect and/or end the game
+    def check_game_conditions(self) -> str | None:
+        # checkmate - game over
+        if self.board.is_checkmate():
+            return "checkmate"
+        # stalemate - game over
+        if self.board.is_stalemate():
+            return "stalemate"
+        # check - warn player
+        if self.board.is_check():
+            return "check"
+        # insufficient material - draw if neither player can checkmate
+        if self.board.is_insufficient_material():
             return "insufficient material"
-        # 50 move rule
-        if Rules.is_fifty_moves(self.halfmoves):
-            return "50 move rule"
-        # 75 move rule
-        if Rules.is_seventyfive_moves(self.halfmoves):
-            return "75 move rule"
-        # 5 fold repetition
-        if Rules.is_fivefold_repetition(self.boards[-1], self.boards):
+        # 5 fold repetition - draw after 5 repetitions of the same position
+        if self.board.is_fivefold_repetition():
             return "5 fold repetition"
+        # 50 move rule - draw after 50 moves without a capture or pawn move
+        if self.board.is_fifty_moves():
+            return "50 move rule"
+        # 75 move rule - draw after 75 moves without a capture or pawn move
+        if self.board.is_seventyfive_moves():
+            return "75 move rule"
 
 
 def app() -> None:
