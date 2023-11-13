@@ -1,14 +1,8 @@
-
 # Chess AI
+This repo contains my own personal chess tooling and other code. The latest version is based around the Stockfish chess engine.
 
-Run the program:
-```
-python3 main.py
-```
+### Run Code
+```python game.py```
 
-### Example Moves
-Moves should have the following format:
-```
-D2 D4
-```
-This will move the piece from position D2 to D4. Lowercase is okay.
+### Move Format
+Moves should be formated using lowercase letters with no spaces (Ex: e2e4)
