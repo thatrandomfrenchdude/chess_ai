@@ -1,0 +1,5 @@
+services:
+  chess:
+    build:
+      context: .
+      dockerfile: Dockerfile

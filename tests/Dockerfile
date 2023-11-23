@@ -26,4 +26,4 @@ RUN apk add --update --no-cache python3 \
 
 COPY . .
 
-ENTRYPOINT ["python", "game.py"]
+ENTRYPOINT ["pytest", "-v", "--color=yes", "test.py"]

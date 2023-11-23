@@ -52,7 +52,6 @@ class Chess(Game):
 
         ### setup chess engine and set to starting position
         self.engine_parameters = {}
-        # self.engine = Stockfish('/usr/local/bin/stockfish') if params['docker'] else Stockfish()
         self.engine = Stockfish()
         self.engine.set_fen_position(start_pos)
 
@@ -88,7 +87,8 @@ class Chess(Game):
                 # get move and show in console
                 self.get_move()
                 move = self.moves[-1]
-                print(f"Last move: {move}")
+                if not self.testing:
+                    print(f"Last move: {move}")
 
                 # move evaluation
                 # get top n best moves at current position
