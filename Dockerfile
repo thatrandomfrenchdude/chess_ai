@@ -1,9 +1,8 @@
-# FROM ubuntu:latest
 FROM alpine:latest
 
-ENV SOURCE_REPO https://github.com/official-stockfish/Stockfish/archive/refs/tags/sf_16.tar.gz
+ENV ENGINE_REPO https://github.com/official-stockfish/Stockfish/archive/refs/tags/sf_16.tar.gz
 
-ADD ${SOURCE_REPO} /root
+ADD ${ENGINE_REPO} /root
 
 WORKDIR /root
 
