@@ -1,0 +1,25 @@
+Quick Recap
+
+The goal of this project is to create an AI that can
+teach me how to improve my chess.
+
+To achieve this, I will do the following:
+1. Create a chess engine.
+    a. pieces
+    b. board
+    c. game
+    d. user
+    e. ai
+2. Ensemble Model
+    a. chess player - teach model to play chess and win
+    b. chess knowledge - teach model to know why
+        - for each move, choose top 3 best moves + classify why
+        - classes why: make space, develop pieces, capitalize on mistake, etc
+    c. chess coach - teach model to improve performance
+        - ai to ai
+3. Genetics
+    a. 
+4. Experiment Setup
+    a. data collection
+    b. create model
+    c. genetics

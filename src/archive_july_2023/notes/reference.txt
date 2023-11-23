@@ -1,0 +1,6 @@
+https://towardsdatascience.com/building-a-chess-ai-that-learns-from-experience-5cff953b6784
+https://github.com/zjeffer/chess-deep-rl
+https://qwerty.dev/chess-symbols-to-copy-and-paste/
+https://github.com/cglouch/snakefish
+https://python-chess.readthedocs.io/en/v1.10.0/core.html
+https://en.wikipedia.org/wiki/Bitboard

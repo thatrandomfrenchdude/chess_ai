@@ -2,7 +2,9 @@ import chess
 from stockfish import Stockfish
 
 # from config import app_config
-from entities import Entity, BestBot
+from entities.entitiy import Entity
+from entities.ai import BestBot
+from entities.human import User
 
 # forsyth edwards notation (fen)
 # https://en.wikipedia.org/wiki/Forsyth–Edwards_Notation
@@ -17,20 +19,41 @@ from entities import Entity, BestBot
 # resources:
 # https://medium.com/@PropelAuth/analyzing-chess-positions-in-python-building-a-chess-analysis-app-part-1-61e6c098f9f3
 # https://stackoverflow.com/questions/71945463/how-can-i-use-stockfish-in-python-so-that-the-evaluation-is-continuously-updated
+# https://pypi.org/project/stockfish/
+# https://github.com/zhelyabuzhsky/stockfish
 
+# desired functionality
+# - import one or more pgn files
+# - train a bot on a set of pgn files --> what does train mean? learn weights model w/ games, fine-tune w/ games, or ?
+# - play a game of chess against a bot. at the end of the game, provide analysis
+#       analysis = best moves in key positions with alternate moves and why
+#       recognize key patterns --> db of known patterns, generalized
+#           train model to recognize probability the next move in a given list of moves match a known pattern
+#           and identify which pattern that is. This information can be used to look up analysis.
+#           for RL, the machine should then capture the problem-solving method and provide it for grading.
+#           graded responses can be used to train the model to explain patterns (teach) better.
+# - maintain a record
 
 class Game:
     pass
 
 class Chess(Game):
     def __init__(self,
+        params: dict = {
+            'testing': False,
+            'docker': False,
+        },
         start_pos: str = chess.STARTING_FEN,
         white_agent: Entity() = BestBot(),
         black_agent: Entity() = BestBot()
     ) -> None:
+        # buttons and levers
+        self.testing = params['testing']
+
         ### setup chess engine and set to starting position
         self.engine_parameters = {}
-        self.engine = Stockfish()
+        self.engine = Stockfish('/usr/local/bin/stockfish') if params['docker'] else Stockfish()
+        # self.engine = Stockfish()
         self.engine.set_fen_position(start_pos)
 
         ### game information
@@ -59,7 +82,8 @@ class Chess(Game):
         try:
             while True:
                 # show game board
-                print(self.board)
+                if not self.testing:
+                    print(self.board)
 
                 # get move and show in console
                 self.get_move()
@@ -68,9 +92,19 @@ class Chess(Game):
 
                 # move evaluation
                 # get top n best moves at current position
+                # where does current move rank?
+                # if not in top n, warn player
+                # how do I know if this is a player or bot?
+                # only analyze if player is a user
+                if self.halfmoves % 2 == 0:
+                    if isinstance(self.white, User):
+                        self.evaluate_move(move) # white just moved
+                else:
+                    if isinstance(self.black, User):
+                        self.evaluate_move(move) # black just moved
 
                 # perform move and check conditions
-                condition = self.perform_move(move)
+                condition = self.apply_move(move)
                 self.halfmoves += 1
                 if self.halfmoves % 2 == 0: # black just moved
                     self.fullmoves += 1
@@ -90,11 +124,11 @@ class Chess(Game):
 
     # gets a move from the appropriate agent and appends to move list
     def get_move(self) -> None:
-        move = self.white.get_move(self.engine) if self.fullmoves % 2 == 0 else self.black.get_move(self.engine)
+        move = self.white.get_move(self.engine) if self.halfmoves % 2 == 0 else self.black.get_move(self.engine)
         self.moves.append(move)
     
     # performs a move in the engine, updates the board list, and checks game conditions
-    def perform_move(self, move) -> str | None:
+    def apply_move(self, move) -> str | None:
         # TODO: update this to use python chess
         # make the move
         self.board.push_san(move)
@@ -103,6 +137,13 @@ class Chess(Game):
         # check game conditions
         condition = self.check_game_conditions()
         return condition
+    
+    # TODO: use stockfish to evaluate move
+    # get top five moves given current position
+    # is current move in them?
+    # where does it rank if not?
+    def evaluate_move(self, move):
+        raise NotImplementedError
         
     # checks various conditions that can affect and/or end the game
     def check_game_conditions(self) -> str | None:
