@@ -11,13 +11,10 @@ WORKDIR /root
 RUN tar xvzf *.tar.gz \
     && apk add --update --no-cache make g++ \
     && cd Stockfish-sf_16/src \
-    # && make build ARCH=x86-64-modern \
     && make build ARCH=armv8 \
     && make install \
     && cd ../.. \
     && rm -rf Stockfish-sf_16 *.tar.gz
-
-# RUN apt-get install stockfish
 
 ENV PYTHONUNBUFFERED=1
 
@@ -30,7 +27,4 @@ RUN apk add --update --no-cache python3 \
 
 COPY . .
 
-ENTRYPOINT ["python", "test.py"]
-# # ENTRYPOINT ["pytest", "-v", "--color=yes", "test.py"]
-# ENTRYPOINT ["python", "test.py"]
-# # ENTRYPOINT [ "/usr/local/bin/stockfish" ] # use to run stockfish directly
+ENTRYPOINT ["pytest", "-v", "--color=yes", "test.py"]
