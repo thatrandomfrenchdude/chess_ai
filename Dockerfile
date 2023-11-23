@@ -1,24 +1,23 @@
+# FROM ubuntu:latest
 FROM alpine:latest
 
-# ENV SOURCE_REPO https://github.com/official-stockfish/Stockfish
-# ENV VERSION 16
-
 ENV SOURCE_REPO https://github.com/official-stockfish/Stockfish/archive/refs/tags/sf_16.tar.gz
-
-# ADD ${SOURCE_REPO}/archive/${VERSION}.tar.gz /root
 
 ADD ${SOURCE_REPO} /root
 
 WORKDIR /root
 
-# Install necessary tools for building
+# build and install stockfish from source
 RUN tar xvzf *.tar.gz \
     && apk add --update --no-cache make g++ \
-    && cd Stockfish-${VERSION}/src \
+    && cd Stockfish-sf_16/src \
+    # && make build ARCH=x86-64-modern \
     && make build ARCH=armv8 \
     && make install \
     && cd ../.. \
-    && rm -rf Stockfish-${VERSION} *.tar.gz
+    && rm -rf Stockfish-sf_16 *.tar.gz
+
+# RUN apt-get install stockfish
 
 ENV PYTHONUNBUFFERED=1
 
