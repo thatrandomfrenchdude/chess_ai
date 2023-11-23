@@ -9,16 +9,10 @@ def run_sys_command(cmd):
     output, error = process.communicate()
     return output.decode("utf-8")
 
-if RUN_DOCKER_TESTS:
-    import os
-    print(os.getcwd())
-    print(run_sys_command("ls -lrt"))
-
 def test_docker():
-    # test that docker is running
-    print(os.getcwd())
-    print(run_sys_command("ls -lrt"))
-    print(run_sys_command("ls -lrt /app/src"))
+    if RUN_DOCKER_TESTS:
+        print(run_sys_command("ls -lrt"))
+        print(run_sys_command("ls -lrt /app/src"))
     assert True
     
 
