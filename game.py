@@ -52,8 +52,8 @@ class Chess(Game):
 
         ### setup chess engine and set to starting position
         self.engine_parameters = {}
-        self.engine = Stockfish('/usr/local/bin/stockfish') if params['docker'] else Stockfish()
-        # self.engine = Stockfish()
+        # self.engine = Stockfish('/usr/local/bin/stockfish') if params['docker'] else Stockfish()
+        self.engine = Stockfish()
         self.engine.set_fen_position(start_pos)
 
         ### game information

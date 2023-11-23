@@ -30,8 +30,6 @@ RUN apk add --update --no-cache python3 \
 
 COPY . .
 
-# ENV PATH="${PATH}:stockfish16/stockfish"
-
 ENTRYPOINT ["python", "test.py"]
 # # ENTRYPOINT ["pytest", "-v", "--color=yes", "test.py"]
 # ENTRYPOINT ["python", "test.py"]

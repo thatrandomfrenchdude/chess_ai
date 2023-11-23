@@ -10,9 +10,7 @@ if RUN_DOCKER_TESTS:
     import os
     print(os.getcwd())
     print(run_sys_command("ls -lrt"))
-    print(run_sys_command("ls -lrt stockfish16"))
     print(run_sys_command("which stockfish"))
-    print(run_sys_command("stockfish --version"))
 
 from game import Chess
 
