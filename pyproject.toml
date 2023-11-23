@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "chess-ai"
+version = "0.1.0"
+description = ""
+authors = ["Nicholas Debeurre <debeurren@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+stockfish = "^3.28.0"
+python-chess = "^1.999"
+pytest = "^7.4.3"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

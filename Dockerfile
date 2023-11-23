@@ -24,6 +24,6 @@ RUN apk add --update --no-cache python3 \
     && pip3 install --no-cache --upgrade pip setuptools \
     && pip install pytest python-chess stockfish
 
-COPY . .
+COPY src /root/src
 
-ENTRYPOINT ["python", "game.py"]
+ENTRYPOINT ["python", "src/game.py"]

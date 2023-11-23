@@ -1,4 +1,7 @@
-RUN_DOCKER_TESTS = False
+import sys
+sys.path.append('src')
+
+RUN_DOCKER_TESTS = True
 
 def run_sys_command(cmd):
     import subprocess
@@ -10,6 +13,14 @@ if RUN_DOCKER_TESTS:
     import os
     print(os.getcwd())
     print(run_sys_command("ls -lrt"))
+
+def test_docker():
+    # test that docker is running
+    print(os.getcwd())
+    print(run_sys_command("ls -lrt"))
+    print(run_sys_command("ls -lrt /app/src"))
+    assert True
+    
 
 from game import Chess
 
@@ -24,3 +35,7 @@ def test_chess_game():
     game = Chess(params=params)
     game.loop()
     assert True
+
+if __name__ == "__main__":
+    test_docker()
+    test_chess_game()

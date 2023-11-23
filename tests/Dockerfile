@@ -2,9 +2,9 @@ FROM alpine:latest
 
 ENV ENGINE_REPO https://github.com/official-stockfish/Stockfish/archive/refs/tags/sf_16.tar.gz
 
-ADD ${ENGINE_REPO} /root
+WORKDIR /app
 
-WORKDIR /root
+ADD ${ENGINE_REPO} .
 
 # build and install stockfish from source
 RUN tar xvzf *.tar.gz \
@@ -24,6 +24,7 @@ RUN apk add --update --no-cache python3 \
     && pip3 install --no-cache --upgrade pip setuptools \
     && pip install pytest python-chess stockfish
 
-COPY . .
+COPY src /app/src
+COPY tests /app/tests
 
-ENTRYPOINT ["pytest", "-v", "--color=yes", "test.py"]
+ENTRYPOINT ["pytest", "-v", "--color=yes", "tests/test.py"]
