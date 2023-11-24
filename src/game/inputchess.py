@@ -2,10 +2,10 @@ import chess
 from stockfish import Stockfish
 
 # from config import app_config
-from game.game import Chess as cg
-from entities.entitiy import Entity
-from entities.ai import BestBot
-from entities.human import User
+from src.game.game import Chess as cg
+from src.entities.entitiy import Entity
+from src.entities.ai import BestBot
+from src.entities.human import User
 
 
 class InputChess(cg):

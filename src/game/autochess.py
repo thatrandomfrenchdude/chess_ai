@@ -2,9 +2,9 @@ import chess
 from stockfish import Stockfish
 
 # from config import app_config
-from game.game import Chess as cg
-from entities.entitiy import Entity
-from entities.ai import BestBot
+from src.game.game import Chess as cg
+from src.entities.entitiy import Entity
+from src.entities.ai import BestBot
 
 
 class AutoChess(cg):
@@ -64,7 +64,7 @@ class AutoChess(cg):
                 if condition not in [None, "check"]:
                     print(f"Game over: {condition}")
                     break
-                elif condition == "check":
+                elif condition == "check" and not self.testing:
                     print("Check")
 
                 # update the chess engine

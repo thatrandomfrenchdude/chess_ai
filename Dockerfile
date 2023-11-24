@@ -2,9 +2,9 @@ FROM alpine:latest
 
 ENV ENGINE_REPO https://github.com/official-stockfish/Stockfish/archive/refs/tags/sf_16.tar.gz
 
-ADD ${ENGINE_REPO} /root
+WORKDIR /app
 
-WORKDIR /root
+ADD ${ENGINE_REPO} .
 
 # build and install stockfish from source
 RUN tar xvzf *.tar.gz \
@@ -16,14 +16,19 @@ RUN tar xvzf *.tar.gz \
     && rm -rf Stockfish-sf_16 *.tar.gz
 
 ENV PYTHONUNBUFFERED=1
+ENV PYTHONPATH=/app
 
 # Install Python and necessary dependencies
-RUN apk add --update --no-cache python3 \
+RUN apk add --update --no-cache python3 poetry \
     && ln -sf python3 /usr/bin/python \
     && python3 -m ensurepip \
-    && pip3 install --no-cache --upgrade pip setuptools \
-    && pip install pytest python-chess stockfish
+    && pip3 install --no-cache --upgrade pip setuptools
 
-COPY src /root/src
+# install python packages poetry
+COPY pyproject.toml poetry.lock /app
+RUN poetry config virtualenvs.create false \
+    && poetry install --no-interaction --no-ansi
 
-ENTRYPOINT ["python", "src/game.py"]
+COPY src /app/src
+
+ENTRYPOINT ["python", "src/app.py"]

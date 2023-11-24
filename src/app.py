@@ -1,4 +1,4 @@
-from game.autochess import AutoChess
+from src.game.autochess import AutoChess
 
 
 def app() -> None:

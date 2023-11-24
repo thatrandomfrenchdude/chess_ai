@@ -1,7 +1,4 @@
-import sys
-sys.path.append('src')
-
-RUN_DOCKER_TESTS = True
+RUN_DOCKER_TESTS = False
 
 def run_sys_command(cmd):
     import subprocess
@@ -11,15 +8,14 @@ def run_sys_command(cmd):
 
 def test_docker():
     if RUN_DOCKER_TESTS:
+        print(run_sys_command("pwd"))
         print(run_sys_command("ls -lrt"))
         print(run_sys_command("ls -lrt /app/src"))
     assert True
-    
-
-from game.autochess import AutoChess
 
 # tests that the main game loop runs with two AI BestBot entities
 def test_chess_game():
+    from src.game.autochess import AutoChess
     # game parameters
     params = {
         'testing': True,

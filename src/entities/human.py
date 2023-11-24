@@ -1,4 +1,4 @@
-from entities.entitiy import Entity
+from src.entities.entitiy import Entity
 
 class User(Entity):
     def __init__(self):

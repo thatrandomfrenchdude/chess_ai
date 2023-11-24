@@ -2,9 +2,9 @@ import chess
 from stockfish import Stockfish
 
 # from config import app_config
-from entities.entitiy import Entity
-from entities.ai import BestBot, AIBot, RLBot
-from entities.human import User
+from src.entities.entitiy import Entity
+from src.entities.ai import BestBot, AIBot, RLBot
+from src.entities.human import User
 
 # resources:
 # https://medium.com/@PropelAuth/analyzing-chess-positions-in-python-building-a-chess-analysis-app-part-1-61e6c098f9f3
