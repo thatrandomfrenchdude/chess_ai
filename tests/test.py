@@ -16,7 +16,7 @@ def test_docker():
     assert True
     
 
-from game import Chess
+from game.autochess import AutoChess
 
 # tests that the main game loop runs with two AI BestBot entities
 def test_chess_game():
@@ -26,7 +26,7 @@ def test_chess_game():
         'docker': True,
     }
     
-    game = Chess(params=params)
+    game = AutoChess(params=params)
     game.loop()
     assert True
 

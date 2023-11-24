@@ -1,0 +1,13 @@
+forsyth edwards notation (fen)
+
+https://en.wikipedia.org/wiki/Forsyth–Edwards_Notation
+
+Example: rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1
+
+1. piece placement from rank 8 to rank 1 separated by /. black is lowercase
+white is uppercase. a number means that many empty squares.
+2. active color. w or b
+3. castling availability. KQkq if none then -
+4. en passant target square in algebraic notation. if none then -
+5. halfmove clock. number of halfmoves since last capture or pawn advance
+6. fullmove number. starts at 1 and is incremented after black's move

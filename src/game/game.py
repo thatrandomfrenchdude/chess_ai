@@ -3,18 +3,8 @@ from stockfish import Stockfish
 
 # from config import app_config
 from entities.entitiy import Entity
-from entities.ai import BestBot
+from entities.ai import BestBot, AIBot, RLBot
 from entities.human import User
-
-# forsyth edwards notation (fen)
-# https://en.wikipedia.org/wiki/Forsyth–Edwards_Notation
-# 1. piece placement from rank 8 to rank 1 separated by /. black is lowercase
-# white is uppercase. a number means that many empty squares.
-# 2. active color. w or b
-# 3. castling availability. KQkq if none then -
-# 4. en passant target square in algebraic notation. if none then -
-# 5. halfmove clock. number of halfmoves since last capture or pawn advance
-# 6. fullmove number. starts at 1 and is incremented after black's move
 
 # resources:
 # https://medium.com/@PropelAuth/analyzing-chess-positions-in-python-building-a-chess-analysis-app-part-1-61e6c098f9f3
@@ -23,19 +13,23 @@ from entities.human import User
 # https://github.com/zhelyabuzhsky/stockfish
 
 # desired functionality
-# - import one or more pgn files
+# - import one or more pgn files --> for what?
 # - train a bot on a set of pgn files --> what does train mean? learn weights model w/ games, fine-tune w/ games, or ?
 # - play a game of chess against a bot. at the end of the game, provide analysis
+#       i want to get better at chess, and I want interacting with this bot to help me
 #       analysis = best moves in key positions with alternate moves and why
 #       recognize key patterns --> db of known patterns, generalized
 #           train model to recognize probability the next move in a given list of moves match a known pattern
 #           and identify which pattern that is. This information can be used to look up analysis.
 #           for RL, the machine should then capture the problem-solving method and provide it for grading.
 #           graded responses can be used to train the model to explain patterns (teach) better.
-# - maintain a record
+# - maintain a record of db of games played to learn from
+# - maintain a hash of all moves ever encountered and best move from each position
+#       add opening an information from known chess research
 
 class Game:
-    pass
+    def __init__(self) -> None:
+        pass
 
 class Chess(Game):
     def __init__(self,
@@ -50,20 +44,20 @@ class Chess(Game):
         # buttons and levers
         self.testing = params['testing']
 
-        ### setup chess engine and set to starting position
+        ### chess engine
         self.engine_parameters = {}
         self.engine = Stockfish()
         self.engine.set_fen_position(start_pos)
 
-        ### game information
+        ### game setup
         self.white = white_agent
         self.black = black_agent
-         # list of moves
-        self.moves = []
-        # list of board strings
         self.board = chess.Board()
+
+        # game state
+        self.moves = []
         self.boards = [self.board.fen()]
-        self.halfmoves = 0
+        self.halfmoves = 0  # even is white, odd is black
         self.fullmoves = 0
 
         ### player settings
@@ -73,54 +67,15 @@ class Chess(Game):
         while not mode in ['0', '1']:
             mode = input("Choose a game mode, 0 user vs ai, 1 for ai vs ai: ")
         return 'UvA' if mode == '0' else 'AvA'
+    
+    # returns true if a human is playing
+    def is_human_playing(self) -> bool:
+        white = True if isinstance(self.white, User) else False
+        black = True if isinstance(self.black, User) else False
+        return white or black
 
     def loop(self) -> None:
-        # flag to track game state
-        condition = None  # none = normal play
-
-        try:
-            while True:
-                # show game board
-                if not self.testing:
-                    print(self.board)
-
-                # get move and show in console
-                self.get_move()
-                move = self.moves[-1]
-                if not self.testing:
-                    print(f"Last move: {move}")
-
-                # move evaluation
-                # get top n best moves at current position
-                # where does current move rank?
-                # if not in top n, warn player
-                # how do I know if this is a player or bot?
-                # only analyze if player is a user
-                if self.halfmoves % 2 == 0:
-                    if isinstance(self.white, User):
-                        self.evaluate_move(move) # white just moved
-                else:
-                    if isinstance(self.black, User):
-                        self.evaluate_move(move) # black just moved
-
-                # perform move and check conditions
-                condition = self.apply_move(move)
-                self.halfmoves += 1
-                if self.halfmoves % 2 == 0: # black just moved
-                    self.fullmoves += 1
-
-                # check game conditions
-                if condition not in [None, "check"]:
-                    print(f"Game over: {condition}")
-                    break
-                elif condition == "check":
-                    print("Check")
-
-                # update the chess engine
-                self.engine.set_fen_position(self.boards[-1])
-        except Exception as e:
-            print(f"Exception: {e}")
-            print("Game Over")
+        raise NotImplementedError
 
     # gets a move from the appropriate agent and appends to move list
     def get_move(self) -> None:
@@ -168,11 +123,3 @@ class Chess(Game):
         # 75 move rule - draw after 75 moves without a capture or pawn move
         if self.board.is_seventyfive_moves():
             return "75 move rule"
-
-
-def app() -> None:
-    game = Chess()
-    game.loop()
-
-if __name__ == '__main__':
-    app()
