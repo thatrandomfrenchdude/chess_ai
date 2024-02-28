@@ -2,7 +2,7 @@ import chess
 from stockfish import Stockfish
 
 # from config import app_config
-from src.game.game import Chess as cg
+from src.game.game import Chess as cg, GameParameters
 from src.entities.entitiy import Entity
 from src.entities.ai import BestBot
 from src.entities.human import User
@@ -10,13 +10,10 @@ from src.entities.human import User
 
 class InputChess(cg):
     def __init__(self,
-        params: dict = {
-            'testing': False,
-            'docker': False,
-        },
-        start_pos: str = chess.STARTING_FEN,
-        white_agent: Entity() = User(),
-        black_agent: Entity() = BestBot()
+        params: GameParameters,
+        start_pos: str,
+        white_agent: Entity,
+        black_agent: Entity
     ) -> None:
         # buttons and levers
         self.testing = params['testing']

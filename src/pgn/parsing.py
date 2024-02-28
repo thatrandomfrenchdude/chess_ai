@@ -66,3 +66,9 @@ def make_pgn(
     with open(outfile, "w", encoding="utf-8") as f:
         exporter = cp.FileExporter(f)
         game.accept(exporter)
+
+def check_games_equal(
+    game1: cp.Game,
+    game2: cp.Game
+) -> bool:
+    return game1 == game2

@@ -1,5 +1,6 @@
 import chess
 from stockfish import Stockfish
+from typing import TypedDict
 
 # from config import app_config
 from src.entities.entitiy import Entity
@@ -27,19 +28,17 @@ from src.entities.human import User
 # - maintain a hash of all moves ever encountered and best move from each position
 #       add opening an information from known chess research
 
-class Game:
-    def __init__(self) -> None:
-        pass
+class GameParameters(TypedDict):
+    testing: bool
+    docker: bool
+
 
 class Chess(Game):
     def __init__(self,
-        params: dict = {
-            'testing': False,
-            'docker': False,
-        },
-        start_pos: str = chess.STARTING_FEN,
-        white_agent: Entity() = BestBot(),
-        black_agent: Entity() = BestBot()
+        params: GameParameters,
+        start_pos: str,
+        white_agent: Entity,
+        black_agent: Entity
     ) -> None:
         # buttons and levers
         self.testing = params['testing']
