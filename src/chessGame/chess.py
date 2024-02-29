@@ -4,7 +4,6 @@ from typing import TypedDict
 
 # from config import app_config
 from src.entities.entity import Entity
-from src.entities.ai import BestBot, AIBot, RLBot
 from src.entities.human import User
 
 # resources:
