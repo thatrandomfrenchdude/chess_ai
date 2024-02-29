@@ -123,6 +123,7 @@ class Chess():
     # performs a move in the engine, updates the board list, and checks game conditions
     def apply_move(self, move) -> str | None:
         # TODO: update this to use python chess
+        # --> move.uci() to get the move in uci format
         # make the move
         self.board.push_san(move)
         self.boards.append(self.board.fen())
@@ -131,12 +132,23 @@ class Chess():
         condition = self.check_game_conditions()
         return condition
     
-    # TODO: use stockfish to evaluate move
-    # get top five moves given current position
-    # is current move in them?
-    # where does it rank if not?
-    def evaluate_move(self, move):
-        raise NotImplementedError
+    def evaluate_move(self, num_moves, depth_limit=None, time_limit=None) -> list[dict]:
+        search_limit = chess.engine.Limit(depth=depth_limit, time=time_limit)
+        info = self.engine.analyse(self.board, search_limit, multipv=num_moves)
+        return [self.format_evaluation(i) for i in info]
+    
+    @staticmethod
+    def format_evaluation(info) -> dict:
+        # always check from white's perspective
+        score = info["score"].white()
+
+        mate_score = score.mate()
+        centipawn_score = score.score()
+        return {
+            "mate_score": mate_score,
+            "centipawn_score": centipawn_score,
+            "principal_variation": [move.uci() for move in info["pv"]],
+        }
         
     # checks various conditions that can affect and/or end the game
     def check_game_conditions(self) -> str | None:
