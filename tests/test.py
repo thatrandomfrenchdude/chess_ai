@@ -15,7 +15,7 @@ def test_docker():
 
 # tests that the main game loop runs with two AI BestBot entities
 def test_chess_game():
-    from src.game.autochess import AutoChess
+    from src.chessGame.autochess import AutoChess
     # game parameters
     params = {
         'testing': True,

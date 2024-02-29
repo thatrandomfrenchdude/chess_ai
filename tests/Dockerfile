@@ -1,4 +1,4 @@
-FROM alpine:latest
+FROM alpine:3.18
 
 ENV ENGINE_REPO https://github.com/official-stockfish/Stockfish/archive/refs/tags/sf_16.tar.gz
 
@@ -25,7 +25,7 @@ RUN apk add --update --no-cache python3 poetry \
     && pip3 install --no-cache --upgrade pip setuptools
 
 # install python packages poetry
-COPY pyproject.toml poetry.lock /app
+COPY pyproject.toml poetry.lock /app/
 RUN poetry config virtualenvs.create false \
     && poetry install --no-interaction --no-ansi
 

@@ -1,4 +1,10 @@
-from src.entities.entitiy import Entity
+from enum import Enum
+
+from src.entities.entity import Entity
+
+class player(Enum):
+    white = 1
+    black = 2
 
 class User(Entity):
     def __init__(self):

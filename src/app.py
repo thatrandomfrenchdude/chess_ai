@@ -1,11 +1,15 @@
-import chess
-
-from src.entities.ai import BestBot
-from src.game.autochess import AutoChess
+from src.chessGame.autochess import AutoChess
+from src.chessGame.inputchess import InputChess
+from src.entities.human import player
 
 # add this to chess
 # evaluate position
 # https://medium.com/@PropelAuth/analyzing-chess-positions-in-python-building-a-chess-analysis-app-part-1-61e6c098f9f3
+
+
+# class player(Enum):
+#     white = 1
+#     black = 2
 
 
 class Game:
@@ -15,22 +19,27 @@ class Game:
 
 # basic chess game
 def app() -> None:
-    # CHESS GAME OPTIONS
+    # CHESS GAME VARS
     params = {
-        'testing': False,
+        'testing': True,
         'docker': False,
     }
-    start_pos = chess.STARTING_FEN
-    white_agent = BestBot()
-    black_agent = BestBot()
+    game = None
+    players = []
+    # options
+    # [] is ai
+    # [player.white] or [player.black] is human vs ai
+    # [player.white, player.black] is human vs human
+    game_type = len(players)
     
     # setup the game
     game = AutoChess(
+        params=params
+    ) if game_type == 0 else InputChess(
         params=params,
-        start_pos=start_pos,
-        white_agent=white_agent,
-        black_agent=black_agent
+        entities=players
     )
+    
 
     # play the game
     game.loop()

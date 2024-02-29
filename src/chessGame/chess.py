@@ -3,7 +3,7 @@ from stockfish import Stockfish
 from typing import TypedDict
 
 # from config import app_config
-from src.entities.entitiy import Entity
+from src.entities.entity import Entity
 from src.entities.ai import BestBot, AIBot, RLBot
 from src.entities.human import User
 
@@ -33,12 +33,17 @@ class GameParameters(TypedDict):
     docker: bool
 
 
-class Chess(Game):
+class Game:
+    def __init__(self) -> None:
+        pass
+
+
+class Chess():
     def __init__(self,
         params: GameParameters,
-        start_pos: str,
-        white_agent: Entity,
-        black_agent: Entity
+        white: Entity,
+        black: Entity,
+        start_pos: str = chess.STARTING_FEN
     ) -> None:
         # buttons and levers
         self.testing = params['testing']
@@ -49,8 +54,9 @@ class Chess(Game):
         self.engine.set_fen_position(start_pos)
 
         ### game setup
-        self.white = white_agent
-        self.black = black_agent
+        self.white = white
+        self.black = black
+        # self.entities = self.setup_agents(entities)
         self.board = chess.Board()
 
         # game state
@@ -58,23 +64,58 @@ class Chess(Game):
         self.boards = [self.board.fen()]
         self.halfmoves = 0  # even is white, odd is black
         self.fullmoves = 0
-
-        ### player settings
-
-    def choose_mode(self) -> str:
-        mode = -1
-        while not mode in ['0', '1']:
-            mode = input("Choose a game mode, 0 user vs ai, 1 for ai vs ai: ")
-        return 'UvA' if mode == '0' else 'AvA'
     
     # returns true if a human is playing
     def is_human_playing(self) -> bool:
         white = True if isinstance(self.white, User) else False
         black = True if isinstance(self.black, User) else False
-        return white or black
+
+        # if a human is playing or testing is on, return true
+        return white or black or self.testing
 
     def loop(self) -> None:
-        raise NotImplementedError
+        # gameplay vars
+        game_condition = "new game"
+        human_readable = True if self.is_human_playing() else False
+        move_evaluation = False
+
+        try:
+            while True:
+                # show game board
+                if human_readable:
+                    print(self.board)
+
+                # get move
+                self.get_move()
+                move = self.moves[-1]
+
+                # show move in console
+                if human_readable:
+                    if self.halfmoves % 2 == 0:
+                        print(f"White move: {move}")
+                    else:
+                        print(f"Black move: {move}")
+
+                # apply move to board
+                game_condition = self.apply_move(move)
+                
+                # update half and full move counts
+                self.halfmoves += 1
+                if self.halfmoves % 2 == 0: # black just moved
+                    self.fullmoves += 1
+
+                # check game conditions
+                if game_condition not in [None, "check"]:
+                    print(f"Game over: {game_condition}")
+                    break
+                elif game_condition == "check" and not self.testing:
+                    print("Check")
+
+                # update the chess engine
+                self.engine.set_fen_position(self.boards[-1])
+        except Exception as e:
+            print(f"Exception: {e}")
+            print("Game Over")
 
     # gets a move from the appropriate agent and appends to move list
     def get_move(self) -> None:

@@ -1,4 +1,4 @@
-from src.entities.entitiy import Entity
+from src.entities.entity import Entity
 
 # generic AI bot
 class AIBot(Entity):
