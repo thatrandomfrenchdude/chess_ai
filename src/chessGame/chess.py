@@ -44,7 +44,7 @@ class Chess():
         black: Entity,
         start_pos: str = chess.STARTING_FEN
     ) -> None:
-        # buttons and levers
+        ### buttons and levers
         self.testing = params['testing']
 
         ### chess engine
@@ -55,7 +55,6 @@ class Chess():
         ### game setup
         self.white = white
         self.black = black
-        # self.entities = self.setup_agents(entities)
         self.board = chess.Board()
 
         # game state
