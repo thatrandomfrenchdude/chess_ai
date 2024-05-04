@@ -70,50 +70,57 @@ class Chess():
 
         # if a human is playing or testing is on, return true
         return white or black or self.testing
+    
+    def step(self) -> None:
+        pass
 
     def loop(self) -> None:
         # gameplay vars
         game_condition = "new game"
         human_readable = True if self.is_human_playing() else False
-        move_evaluation = False
+        move_evaluation = True
 
-        try:
-            while True:
-                # show game board
-                if human_readable:
-                    print(self.board)
+        # try:
+        while True:
+            # show game board
+            if human_readable:
+                print(self.board)
 
-                # get move
-                self.get_move()
-                move = self.moves[-1]
+            # get move
+            self.get_move()
+            move = self.moves[-1]
 
-                # show move in console
-                if human_readable:
-                    if self.halfmoves % 2 == 0:
-                        print(f"White move: {move}")
-                    else:
-                        print(f"Black move: {move}")
+            # show move in console
+            if human_readable:
+                if self.halfmoves % 2 == 0:
+                    print(f"White move: {move}")
+                else:
+                    print(f"Black move: {move}")
 
-                # apply move to board
-                game_condition = self.apply_move(move)
-                
-                # update half and full move counts
-                self.halfmoves += 1
-                if self.halfmoves % 2 == 0: # black just moved
-                    self.fullmoves += 1
+            # evaluate move
+            if move_evaluation:
+                print(self.evaluate_move(move, 3, 20, 1000))
 
-                # check game conditions
-                if game_condition not in [None, "check"]:
-                    print(f"Game over: {game_condition}")
-                    break
-                elif game_condition == "check" and not self.testing:
-                    print("Check")
+            # apply move to board
+            game_condition = self.apply_move(move)
+            
+            # update half and full move counts
+            self.halfmoves += 1
+            if self.halfmoves % 2 == 0: # black just moved
+                self.fullmoves += 1
 
-                # update the chess engine
-                self.engine.set_fen_position(self.boards[-1])
-        except Exception as e:
-            print(f"Exception: {e}")
-            print("Game Over")
+            # check game conditions
+            if game_condition not in [None, "check"]:
+                print(f"Game over: {game_condition}")
+                break
+            elif game_condition == "check" and not self.testing:
+                print("Check")
+
+            # update the chess engine
+            self.engine.set_fen_position(self.boards[-1])
+        # except Exception as e:
+            # print("Game ended unexpectedly.")
+            # print(f"Exception: {e}")
 
     # gets a move from the appropriate agent and appends to move list
     def get_move(self) -> None:
@@ -132,10 +139,19 @@ class Chess():
         condition = self.check_game_conditions()
         return condition
     
-    def evaluate_move(self, num_moves, depth_limit=None, time_limit=None) -> list[dict]:
-        search_limit = chess.engine.Limit(depth=depth_limit, time=time_limit)
-        info = self.engine.analyse(self.board, search_limit, multipv=num_moves)
-        return [self.format_evaluation(i) for i in info]
+    def evaluate_move(self, move, num_moves, depth_limit=None, time_limit=None) -> list[dict]:
+        # get the best moves from the current board --> move has not been applied yet
+        # top_move = True if move in best_moves else False
+        # if the move is a top move
+            # return it to the player along with the better moves
+        # if the move is not in the top moves
+            # apply the move to the board and evaluate
+            # return the top moves and how the move chosen affected the game
+
+        # search_limit = chess.engine.Limit(depth=depth_limit, time=time_limit)
+        # info = self.engine.analyse(self.board, search_limit, multipv=num_moves)
+        # return [self.format_evaluation(i) for i in info]
+        return {}
     
     @staticmethod
     def format_evaluation(info) -> dict:

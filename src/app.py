@@ -25,6 +25,7 @@ def app() -> None:
         'docker': False,
     }
     game = None
+    # players = [player.white]
     players = []
     # options
     # [] is ai
