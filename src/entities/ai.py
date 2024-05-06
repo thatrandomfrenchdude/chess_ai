@@ -18,3 +18,11 @@ class BestBot(AIBot):
 class RLBot(AIBot):
     def __init__(self):
         pass
+
+class MCTSBot(AIBot):
+    def __init__(self):
+        pass
+
+    @staticmethod
+    def get_move(engine):
+        return engine.get_best_move()
