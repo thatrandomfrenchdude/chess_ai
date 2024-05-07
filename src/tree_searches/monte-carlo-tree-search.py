@@ -35,6 +35,7 @@ class MCTS_Node:
     def __init__(self, board, parent=None, max_depth=3):
         # node
         self.board = board # the current state of the game
+        self.color = board.turn # the color of the player
         self.state = self.board.fen() # the current state of the game
         self.max_depth = max_depth # the maximum depth of the tree
         
@@ -48,9 +49,9 @@ class MCTS_Node:
         
         # stores the record of the current node as the sum of all subsequent nodes
         self.results = {
-            "wins": 0,
-            "draws": 0,
-            "losses": 0
+            "win": 0, # wins
+            "draw": 0, # draws
+            "loss": 0 # losses
         }
 
         if max_depth > 0:
@@ -84,22 +85,72 @@ class MCTS_Node:
             )
             self.children.append(child_node)
     
+    def rollout_policy(self, possible_moves):
+        """
+        Policy that defines the rollout strategy. Rollout is simulation.
+        
+        Classical Monte Carlo randomly selects a move from the possible
+        moves to play and continues as such until the game is over.
+
+        Can be updated with better policies.
+        """
+        return possible_moves[np.random.randint(len(possible_moves))]
+    
     def rollout(self):
         """
         From the current state, the rest of the game is simulated until completion and the outcome
         of the game is returned.
 
-        For wins, 1 is returned.
-        For losses, -1 is returned.
-        For draws, 0 or 0.5 is returned. 0.5 can be used when a draw is preferable to a loss.
+        Result is returned as 1-0 for white win, 0-1 for black win, and 1/2-1/2 for draw.
         """
-        current_rollout_state = self.state
+        start_fen = self.board.fen()
 
-        while not current_rollout_state.is_game_over():
-            possible_moves = current_rollout_state.get_legal_actions()
-            action = self.rollout_policy(possible_moves)
-            current_rollout_state = current_rollout_state.move(action)
-        return current_rollout_state.game_result()
+        # while not current_rollout_state.is_game_over():
+        count = 0
+        while not self.board.is_game_over():
+            # get all the legal moves from this position
+            possible_moves = self.board.get_legal_actions()
+            
+            # select a move according to the rollout policy
+            move = self.rollout_policy(possible_moves)
+
+            # apply the move to the board
+            # current_rollout_state = current_rollout_state.move(move)
+            self.board.push(move)
+            
+            # increment the count
+            count += 1
+        
+        # get the game result
+        outcome = self.board.outcome()
+        result = outcome.result()
+
+        # undo the moves
+        for _ in range(count):
+            self.board.pop()
+
+        # confirm matching fen
+        assert start_fen == self.board.fen()
+
+        # interpret the result and return it
+        return result
+    
+    def update_results(self, result):
+        """
+        Update the results of the current node based on the result of the rollout.
+        """
+        if result == '1-0':
+            if self.color: # true is white
+                self.results["win"] += 1
+            else:
+                self.results["loss"] += 1
+        elif result == '0-1':
+            if self.color:
+                self.results["loss"] += 1
+            else:
+                self.results["win"] += 1
+        else:
+            self.results["draw"] += 1
     
     def backpropagate(self, result) -> None:
         """
@@ -109,14 +160,9 @@ class MCTS_Node:
         """
         self.number_of_visits += 1
 
-        if result == 1:
-            self.results["wins"] += result
-        elif result == 0.5:
-            self.results["draw"] += result
-        else: # -1
-            self.results["losses"] += result
+        # update the results of the current node
+        self.update_results(result)
 
-        # if the node has a parent, pass up the result
         if self.parent:
             self.parent.backpropagate(result)
     
@@ -138,17 +184,6 @@ class MCTS_Node:
         
         # return the child with the highest ucb
         return self.children[np.argmax(ucbs)]
-    
-    def rollout_policy(self, possible_moves):
-        """
-        Policy that defines the rollout strategy. Rollout is simulation.
-        
-        Classical Monte Carlo randomly selects a move from the possible
-        moves to play and continues as such until the game is over.
-
-        Can be updated with better policies.
-        """
-        return possible_moves[np.random.randint(len(possible_moves))]
     
     # def tree_policy(self):
     #     """
@@ -203,18 +238,6 @@ class MCTS_Node:
         return the number of times the current node has been visited
         """
         return self.number_of_visits
-    
-    def game_result(self):
-        """
-        Returns the final game results.
-
-        Modify according to the use case.
-
-        For wins, 1 is returned.
-        For losses, -1 is returned.
-        For draws, 0 or 0.5 is returned. 0.5 can be used when a draw is preferable to a loss.
-        """
-        return 0
 
 def best_move(state, engine):
     """
@@ -250,5 +273,22 @@ def main():
     state = 1 # initial chess state
     return best_move(state, engine)
 
+def test_game():
+    game = chess.Board(fen='rnbqkbnr/pppppppp/8/8/4P3/8/PPPP1PPP/RNBQKBNR b KQkq - 0 1')
+    print(game)
+    moves = 0
+    while not game.is_game_over():
+        move = np.random.choice(list(game.legal_moves))
+        game.push(move)
+        moves += 1 
+    print(game)
+    print(f"num moves: {moves}")
+    outcome = game.outcome()
+    print(f"outcome: {outcome}")
+    print(f"result: {game.result()}") # True if White, False if Black
+    print(f"winner: {outcome.winner}") # 1-0 means white, 0-1 means black, 1/2-1/2 means draw
+    print(f"game over reason: {outcome.termination}")
+
 if __name__ == "__main__":
-    main()
+    # main()
+    test_game()
