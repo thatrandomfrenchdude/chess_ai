@@ -28,6 +28,7 @@ import chess
 import sys
 import time
 from math import e
+from stockfish import Stockfish
 
 # TODO:
 # want to make this recursive with stopping conditions I think
@@ -41,19 +42,20 @@ from math import e
 # this is where the alpha beta pruning comes in, avoid expanding nodes that are not
 # necessary to expand
 
+engine = Stockfish('/opt/homebrew/bin/stockfish')
+
 class MCTS_Node:
-    def __init__(self, state, color, parent=None, max_depth=3):
+    def __init__(self, state, color, parent=None, prev_move=None):
         # node
         self.state = state # the current state of the game in fen format
-        self.max_depth = max_depth # the maximum depth of the tree
         self.color = color
+        self.number_of_visits = 0 # n 
+        self.untried_actions = self.untried_moves(self.state) # actions that have not been tried yet
+        self.prev_move = prev_move # the move that led to this state
         
         # relatives
         self.parent: MCTS_Node | None = parent # the parent state of the current state
         self.children: list[MCTS_Node] = [] # children of the current node
-
-        # the number of times the current node has been visited
-        self.number_of_visits = 0
         
         # stores the record of the current node as the sum of all subsequent nodes
         self.results = {
@@ -61,6 +63,13 @@ class MCTS_Node:
             "draw": 0, # draws
             "loss": 0 # losses
         }
+
+    @staticmethod
+    def untried_moves(state):
+        """
+        Returns all the untried moves for a given state.
+        """
+        return list(chess.Board(fen=state).legal_moves)
 
     def expand(self):
         """
@@ -71,32 +80,56 @@ class MCTS_Node:
         to the children array and the child node is returned.
         """
 
-        # make a board for the curren node to generate the fen for children nodes
+        action = self.untried_actions.pop()
+
+        # make a board for the current node to generate the fen for children nodes
         child_board = chess.Board(fen=self.state)
 
-        for move in child_board.legal_moves:
-            # apply the move to the board
-            child_board.push(move)
+        # apply the move to the board
+        child_board.push(action)
 
-            # get the fen of the new board
-            child_fen = child_board.fen()
+        next_state = child_board.fen()
 
-            # undo the move
-            child_board.pop()
+        child_node = MCTS_Node(
+            state=next_state,
+            color=not self.color,
+            parent=self,
+            prev_move=action
+        )
 
-            # confirm the reset board is the same as the original board
-            assert self.state == child_board.fen()
+        # append this to the children of the current node
+        self.children.append(child_node)
 
-            # create a new node, passing the board and the parent node
-            child_node = MCTS_Node(
-                child_fen,
-                color=not self.color,
-                parent=self,
-                max_depth=self.max_depth - 1
-            )
-            self.children.append(child_node)
+        # return the new node
+        return child_node
+
+        # for move in child_board.legal_moves:
+        #     # append the move to the node
+        #     self.untried_actions.append(move)
+            
+        #     # apply the move to the board to get the next state
+        #     child_board.push(move)
+
+        #     # get the fen of the new board
+        #     child_fen = child_board.fen()
+
+        #     # undo the move
+        #     child_board.pop()
+
+        #     # confirm the reset board is the same as the original board
+        #     assert self.state == child_board.fen()
+
+        #     # create a new node, passing the board and the parent node
+        #     child_node = MCTS_Node(
+        #         state = child_fen,
+        #         color=not self.color,
+        #         parent=self,
+        #         prev_move=move
+        #     )
+        #     self.children.append(child_node)
     
-    def rollout_policy(self, possible_moves):
+    @staticmethod
+    def rollout_policy(board):
         """
         Policy that defines the rollout strategy. Rollout is simulation.
         
@@ -105,7 +138,20 @@ class MCTS_Node:
 
         Can be updated with better policies.
         """
-        return possible_moves[np.random.randint(len(possible_moves))]
+        random = True
+
+        if random:
+            # get all the legal moves from this position
+            possible_moves = list(board.legal_moves)
+            
+            # select a move according to the rollout policy
+            move = possible_moves[np.random.randint(len(possible_moves))]
+
+            # apply the move to the board
+            board.push(move)
+        else:
+            engine.set_fen_position(board.fen())
+            move = engine.get_best_move_time(500)
     
     def rollout(self):
         """
@@ -115,24 +161,14 @@ class MCTS_Node:
         Result is returned as 1-0 for white win, 0-1 for black win, and 1/2-1/2 for draw.
         """
         
+        # TODO: note running "dozens of games", only single iteration
+
         # create a board from the fen to use for the rollout
         rollout_board = chess.Board(fen=self.state)
 
         # while not current_rollout_state.is_game_over():
-        count = 0
         while not rollout_board.is_game_over():
-            # get all the legal moves from this position
-            possible_moves = list(rollout_board.legal_moves)
-            
-            # select a move according to the rollout policy
-            move = self.rollout_policy(possible_moves)
-
-            # apply the move to the board
-            # current_rollout_state = current_rollout_state.move(move)
-            rollout_board.push(move)
-            
-            # increment the count
-            count += 1
+            self.rollout_policy(rollout_board)
         
         # get the game result
         result = rollout_board.outcome().result()
@@ -163,10 +199,6 @@ class MCTS_Node:
         The first term in the equation is the exploitation, the second
         is the exploration.
         """
-        # if the node has no children, expand it
-        if self.children == []:
-            self.expand()
-
         # very small number to prevent division by 0
         tiny_number = 10**-6
 
@@ -185,6 +217,18 @@ class MCTS_Node:
         # return the child with the highest ucb
         return self.children[np.argmax(ucbs)]
     
+    def tree_policy(self):
+        """
+        Select the best child node to explore.
+        """
+        curr_node = self
+        while not curr_node.is_terminal_node():
+            if not len(curr_node.untried_actions) == 0:
+                return curr_node.expand()
+            else:
+                curr_node = curr_node.best_child()
+        return curr_node
+    
     # choose the best move to take from
     def best_action(self):
         """
@@ -193,15 +237,16 @@ class MCTS_Node:
         This code calls expansion, simulation, and backpropagation.
         """
 
-        simulation_no = 1000 # num simulations to run
+        simulation_no = 100 # num simulations to run
 
-        # expand the parent node
-        self.expand()
+        # # expand the parent node
+        # # TODO: where do I subsequently call expand? only expand as needed
+        # self.expand()
 
         for i in range(simulation_no):
 
             # select a node from which to run the rollout
-            v = self.best_child()
+            v = self.tree_policy()
 
             # follow the node to the end of the game using the rollout policy
             reward = v.rollout()
@@ -209,8 +254,11 @@ class MCTS_Node:
             # backpropagate the result of the rollout through the tree
             v.backpropagate(reward)
 
-        print(f"Number of visits: {self.number_of_visits}")
-        return self.best_child().state
+        # return the child with the highest number of visits, not just the best child according to ucbs
+        # print(f"Number of visits: {self.number_of_visits}")
+        # for child in self.children:
+        #     print(child.number_of_visits)
+        return self.best_child().prev_move
     
     def update_results(self, result):
         """
@@ -231,9 +279,9 @@ class MCTS_Node:
     
     def is_terminal_node(self):
         """
-        Used to check if a node is terminal. Terminal node is when the game is over.
+        Used to check if a node is terminal. Terminal node is when the node 
         """
-        return self.board.is_game_over()
+        return True if chess.Board(fen=self.state).is_game_over() else False
     
     def get_win_loss(self):
         """
@@ -252,29 +300,15 @@ def best_move(state, color):
     Returns the best move from a given state.
     """
     # run a monte carlo tree search on a given state
-    best_next_state = MCTS_Node(
+    node = MCTS_Node(
         state=state,
         color=color
-    ).best_action()
+    )
+    next_move = node.best_action()
 
-    # TODO
-    # compare the new state to the old state to get the move to return
-    board = chess.Board(fen=state)
-    move = ''
-    moves = board.legal_moves
+    return next_move
 
-    # get the move that was made
-    # TODO: can be optimized, leaving this for now
-    for m in moves:
-        board.push(m)
-        if board.fen() == best_next_state:
-            move = m
-            break
-        board.pop()
-
-    return move
-
-def main():
+def one_move():
     """
     Returns the best move from a given position.
     """
@@ -294,6 +328,38 @@ def main():
     print(game)
     print(f"Best move: {monte_carlo_move}")
 
+def bot_v_bot():
+    """
+    Run a game between two monte carlo bots.
+    """
+    # define an initial state
+    initial_state = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1' # starting fen
+
+    # start a chess game form the initial state
+    game = chess.Board(fen=initial_state)
+
+    # print the board
+    print(f"{game}\n")
+
+    # run the game until it is over
+    while not game.is_game_over():
+        print("Getting next move...")
+
+        # get the best move for the current player
+        start = time.time()
+        monte_carlo_move = best_move(game.fen(), color=game.turn)
+        end = time.time()
+
+        # push the best move to the board
+        game.push(monte_carlo_move)
+
+        # print the board and best move
+        print(game)
+        print(f"Best move: {monte_carlo_move}")
+        print(f"Time taken: {end - start}s\n")
+
+    # print the outcome of the game
+    print(f"Game over. {game.result()}")
 
 def test_game():
     # testing to see if start color affects the way outcome is written. No.
@@ -313,9 +379,16 @@ def test_game():
     print(f"winner: {outcome.winner}") # 1-0 means white, 0-1 means black, 1/2-1/2 means draw
     print(f"game over reason: {outcome.termination}")
 
+# def check_function_time(my_func: callable, *args):
+#     start = time.time()
+#     my_func(*args)
+#     end = time.time()
+#     print(f"Time taken: {end - start}s")
+
 if __name__ == "__main__":
     start = time.time()
-    main()
+    one_move()
     # test_game()
+    # bot_v_bot()
     end = time.time()
-    print(f"Time taken: {int(end - start)}s")
+    print(f"Total time taken: {int(end - start)}s")
