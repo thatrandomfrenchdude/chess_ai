@@ -73,11 +73,7 @@ class MCTS_Node:
 
     def expand(self):
         """
-        From the given state, generate all the children provided we are within the
-        max search depth as denoted by self.max_depth.
-
-        In this step, all possible child nodes of the generated state are appended
-        to the children array and the child node is returned.
+        Expand the 
         """
 
         action = self.untried_actions.pop()
@@ -223,8 +219,10 @@ class MCTS_Node:
         """
         curr_node = self
         while not curr_node.is_terminal_node():
+            # try a new move if there are untried actions
             if not len(curr_node.untried_actions) == 0:
                 return curr_node.expand()
+            # otherwise choose the best child
             else:
                 curr_node = curr_node.best_child()
         return curr_node
