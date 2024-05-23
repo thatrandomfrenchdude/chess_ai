@@ -25,14 +25,18 @@ def app() -> None:
         'docker': False,
     }
     game = None
-    players = []
+
+    # player selection
     # options
     # [] is ai
     # [player.white] or [player.black] is human vs ai
     # [player.white, player.black] is human vs human
-    game_type = len(players)
+    # players = [player.white]
+    players = []
+
     
     # setup the game
+    game_type = len(players)
     game = AutoChess(
         params=params
     ) if game_type == 0 else InputChess(
