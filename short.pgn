@@ -1,0 +1,21 @@
+[Event "Live Chess"]
+[Site "Chess.com"]
+[Date "2023.11.22"]
+[Round "-"]
+[White "TheRod20"]
+[Black "soccerbutt"]
+[Result "1-0"]
+[WhiteElo "1028"]
+[BlackElo "1018"]
+[TimeControl "300"]
+[EndTime "18:03:45 PST"]
+[Termination "TheRod20 won by resignation"]
+
+1. d4 {[%clk 0:04:55.7]} 1... Nf6 {[%clk 0:04:57.8]} 2. Nf3 {[%clk 0:04:53.8]}
+2... g6 {[%clk 0:04:56.2]} 3. Bg5 {[%clk 0:04:51.3]} 3... Bg7 {[%clk 0:04:55.3]}
+4. e3 {[%clk 0:04:46.7]} 4... Nc6 {[%clk 0:04:52.3]} 5. Nc3 {[%clk 0:04:42.3]}
+5... d6 {[%clk 0:04:48.1]} 6. h3 {[%clk 0:04:40.4]} 6... Bf5 {[%clk 0:04:45]} 7.
+Bd3 {[%clk 0:04:30.5]} 7... Bxd3 {[%clk 0:04:36.4]} 8. Qxd3 {[%clk 0:04:28]}
+8... e5 {[%clk 0:04:30.7]} 9. dxe5 {[%clk 0:04:17.9]} 9... Nxe5 {[%clk 0:04:29]}
+10. Nxe5 {[%clk 0:04:13.4]} 10... dxe5 {[%clk 0:04:28.6]} 11. Qb5+ {[%clk
+0:04:08.5]} 11... Nd7 {[%clk 0:04:22.7]} 12. Bxd8 {[%clk 0:04:06]} 1-0
