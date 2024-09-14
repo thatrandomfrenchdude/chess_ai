@@ -1,0 +1,93 @@
+2024-09-14 15:39:48,242 - INFO - Running training for 10 epochs
+2024-09-14 15:39:48,242 - INFO - Epoch 1/10
+2024-09-14 15:39:49,721 - INFO - Bot 1: Won 0 games
+2024-09-14 15:39:51,693 - INFO - Bot 2: Won 0 games
+2024-09-14 15:39:54,606 - INFO - Bot 3: Won 0 games
+2024-09-14 15:39:56,285 - INFO - Bot 4: Won 0 games
+2024-09-14 15:39:58,241 - INFO - Bot 5: Won 0 games
+2024-09-14 15:39:58,241 - INFO - Selected top 2 bots for weight crossover
+2024-09-14 15:39:58,244 - INFO - Weights updated using top-performing bots
+2024-09-14 15:39:58,244 - INFO - Epoch 1: Top bot won 0 games
+2024-09-14 15:39:58,244 - INFO - Epoch 2/10
+2024-09-14 15:40:02,291 - INFO - Bot 1: Won 0 games
+2024-09-14 15:40:05,769 - INFO - Bot 2: Won 0 games
+2024-09-14 15:40:09,793 - INFO - Bot 3: Won 0 games
+2024-09-14 15:40:14,288 - INFO - Bot 4: Won 0 games
+2024-09-14 15:40:17,846 - INFO - Bot 5: Won 0 games
+2024-09-14 15:40:17,846 - INFO - Selected top 2 bots for weight crossover
+2024-09-14 15:40:17,847 - INFO - Weights updated using top-performing bots
+2024-09-14 15:40:17,847 - INFO - Epoch 2: Top bot won 0 games
+2024-09-14 15:40:17,847 - INFO - Epoch 3/10
+2024-09-14 15:40:20,531 - INFO - Bot 1: Won 0 games
+2024-09-14 15:40:23,105 - INFO - Bot 2: Won 0 games
+2024-09-14 15:40:25,863 - INFO - Bot 3: Won 0 games
+2024-09-14 15:40:29,438 - INFO - Bot 4: Won 0 games
+2024-09-14 15:40:31,595 - INFO - Bot 5: Won 0 games
+2024-09-14 15:40:31,595 - INFO - Selected top 2 bots for weight crossover
+2024-09-14 15:40:31,596 - INFO - Weights updated using top-performing bots
+2024-09-14 15:40:31,596 - INFO - Epoch 3: Top bot won 0 games
+2024-09-14 15:40:31,596 - INFO - Epoch 4/10
+2024-09-14 15:40:35,077 - INFO - Bot 1: Won 0 games
+2024-09-14 15:40:38,714 - INFO - Bot 2: Won 0 games
+2024-09-14 15:40:43,216 - INFO - Bot 3: Won 0 games
+2024-09-14 15:40:47,648 - INFO - Bot 4: Won 0 games
+2024-09-14 15:40:51,759 - INFO - Bot 5: Won 0 games
+2024-09-14 15:40:51,759 - INFO - Selected top 2 bots for weight crossover
+2024-09-14 15:40:51,760 - INFO - Weights updated using top-performing bots
+2024-09-14 15:40:51,760 - INFO - Epoch 4: Top bot won 0 games
+2024-09-14 15:40:51,761 - INFO - Epoch 5/10
+2024-09-14 15:40:55,345 - INFO - Bot 1: Won 0 games
+2024-09-14 15:40:58,376 - INFO - Bot 2: Won 0 games
+2024-09-14 15:41:01,404 - INFO - Bot 3: Won 0 games
+2024-09-14 15:41:05,317 - INFO - Bot 4: Won 0 games
+2024-09-14 15:41:08,479 - INFO - Bot 5: Won 0 games
+2024-09-14 15:41:08,479 - INFO - Selected top 2 bots for weight crossover
+2024-09-14 15:41:08,480 - INFO - Weights updated using top-performing bots
+2024-09-14 15:41:08,480 - INFO - Epoch 5: Top bot won 0 games
+2024-09-14 15:41:08,480 - INFO - Epoch 6/10
+2024-09-14 15:41:12,437 - INFO - Bot 1: Won 0 games
+2024-09-14 15:41:16,769 - INFO - Bot 2: Won 0 games
+2024-09-14 15:41:21,116 - INFO - Bot 3: Won 0 games
+2024-09-14 15:41:23,773 - INFO - Bot 4: Won 0 games
+2024-09-14 15:41:27,738 - INFO - Bot 5: Won 0 games
+2024-09-14 15:41:27,738 - INFO - Selected top 2 bots for weight crossover
+2024-09-14 15:41:27,739 - INFO - Weights updated using top-performing bots
+2024-09-14 15:41:27,739 - INFO - Epoch 6: Top bot won 0 games
+2024-09-14 15:41:27,739 - INFO - Epoch 7/10
+2024-09-14 15:41:31,243 - INFO - Bot 1: Won 0 games
+2024-09-14 15:41:34,795 - INFO - Bot 2: Won 0 games
+2024-09-14 15:41:38,679 - INFO - Bot 3: Won 0 games
+2024-09-14 15:41:42,590 - INFO - Bot 4: Won 0 games
+2024-09-14 15:41:46,071 - INFO - Bot 5: Won 0 games
+2024-09-14 15:41:46,071 - INFO - Selected top 2 bots for weight crossover
+2024-09-14 15:41:46,071 - INFO - Weights updated using top-performing bots
+2024-09-14 15:41:46,071 - INFO - Epoch 7: Top bot won 0 games
+2024-09-14 15:41:46,071 - INFO - Epoch 8/10
+2024-09-14 15:41:50,033 - INFO - Bot 1: Won 0 games
+2024-09-14 15:41:53,577 - INFO - Bot 2: Won 0 games
+2024-09-14 15:41:57,490 - INFO - Bot 3: Won 0 games
+2024-09-14 15:42:00,543 - INFO - Bot 4: Won 0 games
+2024-09-14 15:42:04,903 - INFO - Bot 5: Won 0 games
+2024-09-14 15:42:04,903 - INFO - Selected top 2 bots for weight crossover
+2024-09-14 15:42:04,904 - INFO - Weights updated using top-performing bots
+2024-09-14 15:42:04,904 - INFO - Epoch 8: Top bot won 0 games
+2024-09-14 15:42:04,904 - INFO - Epoch 9/10
+2024-09-14 15:42:08,036 - INFO - Bot 1: Won 0 games
+2024-09-14 15:42:11,088 - INFO - Bot 2: Won 0 games
+2024-09-14 15:42:14,538 - INFO - Bot 3: Won 0 games
+2024-09-14 15:42:18,021 - INFO - Bot 4: Won 0 games
+2024-09-14 15:42:21,973 - INFO - Bot 5: Won 0 games
+2024-09-14 15:42:21,973 - INFO - Selected top 2 bots for weight crossover
+2024-09-14 15:42:21,973 - INFO - Weights updated using top-performing bots
+2024-09-14 15:42:21,973 - INFO - Epoch 9: Top bot won 0 games
+2024-09-14 15:42:21,973 - INFO - Epoch 10/10
+2024-09-14 15:42:25,918 - INFO - Bot 1: Won 0 games
+2024-09-14 15:42:28,572 - INFO - Bot 2: Won 0 games
+2024-09-14 15:42:32,486 - INFO - Bot 3: Won 0 games
+2024-09-14 15:42:35,539 - INFO - Bot 4: Won 0 games
+2024-09-14 15:42:39,424 - INFO - Bot 5: Won 0 games
+2024-09-14 15:42:39,424 - INFO - Selected top 2 bots for weight crossover
+2024-09-14 15:42:39,425 - INFO - Weights updated using top-performing bots
+2024-09-14 15:42:39,425 - INFO - Epoch 10: Top bot won 0 games
+2024-09-14 15:42:39,429 - INFO - Model saved to models/final_chess_bot.pth
+2024-09-14 15:42:39,429 - INFO - Training complete. Final model saved.
